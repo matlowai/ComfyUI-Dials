@@ -155,7 +155,7 @@ on Hugging Face: **[MATLOWAI/H3-Dials](https://huggingface.co/MATLOWAI/H3-Dials)
 [Pika H3 Flex](https://huggingface.co/Pika-Labs/Pika-H3-Flex) is a 6-step, no-CFG LoRA for MiniMax H3. Dials work on it
 unchanged: the motion dial sits between the Pika LoRA and the sampler.
 
-[▶ Motion dial on Pika, 0 to +3](assets/pika_dial_sweep.mp4)
+[▶ Motion dial on Pika, 0 to +3](assets/pika_dial_sweep.mp4) · [▶ De-rope vs no de-rope](assets/pika_derope_compare.mp4)
 
 | workflow | what it does |
 |---|---|
@@ -184,7 +184,7 @@ On Pika, **+0.5 to +1.0** is the useful range.
 | render | time |
 |---|---|
 | Pika 6 steps | about 1.5 min |
-| Pika 6 steps + de-rope | about 5.5 min |
+| Pika 6 steps + de-rope | about 5.5–6 min |
 | MiniMax H3, 25 steps, no de-rope | about 5.5 min |
 
 So a de-roped Pika clip costs about the same as one plain 25-step render of the base model.
@@ -195,7 +195,7 @@ So a de-roped Pika clip costs about the same as one plain 25-step render of the 
 |---|---|
 | Pika's last 3 steps (re-enters at about inject 0.25) | 22.5 dB |
 | **inject 0.48, Pika's steps (the workflow default)** | 18.2 dB |
-| experimental 6+6 below 0.48 | measurement in progress |
+| experimental 6+6 below 0.48 | 17.3 dB |
 
 **No background music:** write `non_diegetic_music: N/A` (Pika's prompt guide).
 
