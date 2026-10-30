@@ -13,6 +13,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 UNET = "minimax_h3_fl2va_pruned_int8_convrot.safetensors"
 TE = "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
 VAE = "minimax_h3_video_vae_fp16.safetensors"
+AUDIO_VAE = "minimax_h3_audio_vae_fp32.safetensors"
 PROMPT = "A busker plays guitar on a busy city sidewalk at sunset while people walk past and a dog watches."
 GAP, TITLE = 40, 34
 COLS = {"left": -900, "mid": -380, "right": 140}
@@ -89,14 +90,17 @@ def h3_render(g, model_src, note):
                  inputs=[("noise", "NOISE", None), ("guider", "GUIDER", None), ("sampler", "SAMPLER", None), ("sigmas", "SIGMAS", None), ("latent_image", "LATENT", None)],
                  outputs=[("output", "LATENT"), ("denoised_output", "LATENT")], api={})
     dec = g.node("VAEDecode", "right", 420, inputs=[("samples", "LATENT", None), ("vae", "VAE", None)], outputs=[("IMAGE", "IMAGE")], api={})
-    vid = g.node("CreateVideo", "right", 420, [24, 8], inputs=[("images", "IMAGE", None)], outputs=[("VIDEO", "VIDEO")], api={"fps": 24.0})
+    avae = g.node("VAELoader", "left", 320, [AUDIO_VAE], outputs=[("VAE", "VAE")], api={"vae_name": AUDIO_VAE}, title="Audio VAE")
+    adec = g.node("VAEDecodeAudio", "right", 420, inputs=[("samples", "LATENT", None), ("vae", "VAE", None)], outputs=[("AUDIO", "AUDIO")], api={})
+    vid = g.node("CreateVideo", "right", 420, [24, 8], inputs=[("images", "IMAGE", None), ("audio", "AUDIO", None)], outputs=[("VIDEO", "VIDEO")], api={"fps": 24.0})
     save = g.node("SaveVideo", "right", 420, ["video/dials", "auto", "auto"], inputs=[("video", "VIDEO", None)], outputs=[],
                   api={"filename_prefix": "video/dials", "format": "mp4", "codec": "h264"})
     g.link(model_src[0], model_src[1], guider, "model")
     g.link(model_src[0], model_src[1], sched, "model")
     g.link(cond, 0, guider, "conditioning")
     for s, slot, d, nm in ((noise, 0, out, "noise"), (guider, 0, out, "guider"), (sampler, 0, out, "sampler"), (sched, 0, out, "sigmas"),
-                           (cond, 1, out, "latent_image"), (out, 0, dec, "samples"), (vae, 0, dec, "vae"), (dec, 0, vid, "images"), (vid, 0, save, "video")):
+                           (cond, 1, out, "latent_image"), (out, 0, dec, "samples"), (vae, 0, dec, "vae"), (dec, 0, vid, "images"),
+                           (out, 0, adec, "samples"), (avae, 0, adec, "vae"), (adec, 0, vid, "audio"), (vid, 0, save, "video")):
         g.link(s, slot, d, nm)
     g.node("MarkdownNote", "left", 320, [note], height=330)
     return clip
