@@ -158,6 +158,8 @@ unchanged: the motion dial and an evil slot (dread, off at 0) sit between the Pi
 [▶ Motion dial on Pika, 0 to +3](assets/pika_dial_sweep.mp4) · [▶ De-rope vs no de-rope](assets/pika_derope_compare.mp4) ·
 [▶ Dread 0 / +0.5 / +1 on Pika](assets/pika_dread_compare.mp4)
 
+*The motion-sweep and de-rope videos were rendered with an earlier wording of the example prompt, before the magical-girl rewrite, so the workflows' default prompt won't reproduce them exactly. Re-renders with the current wording are coming.*
+
 | workflow | what it does |
 |---|---|
 | `dials_pika_h3_flex.json` | Pika 6-step + motion dial. 1280x704 (about 0.9 MP), 141 frames. |
