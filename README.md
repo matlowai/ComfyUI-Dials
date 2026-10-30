@@ -124,7 +124,8 @@ The report gives two numbers:
 | `h3_motion.safetensors` | hook (Load Dial → Apply Dial) | still, posing, frozen | running, jumping, moving energetically | 24 pairs (8 subjects × 3), agreement 0.78. Useful range −2…+2 |
 | `h3_motion_lora.safetensors` | LoRA file (stock LoRA loader or Load Dial) | same pairs | same | about 0.6× the hook's effect per unit, so use ~1.6× the strength |
 
-The pair files are in `example_pairs/`. More dials are in testing.
+The pair files are in `example_pairs/`. More dials are in testing. The dial library, with demo videos, is on Hugging
+Face: **[MATLOWAI/H3-Dials](https://huggingface.co/MATLOWAI/H3-Dials)**.
 
 ## Measured
 
