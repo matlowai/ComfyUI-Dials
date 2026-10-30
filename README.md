@@ -153,9 +153,10 @@ on Hugging Face: **[MATLOWAI/H3-Dials](https://huggingface.co/MATLOWAI/H3-Dials)
 ## Pika H3 Flex + Dials
 
 [Pika H3 Flex](https://huggingface.co/Pika-Labs/Pika-H3-Flex) is a 6-step, no-CFG LoRA for MiniMax H3. Dials work on it
-unchanged: the motion dial sits between the Pika LoRA and the sampler.
+unchanged: the motion dial and an evil slot (dread, off at 0) sit between the Pika LoRA and the sampler.
 
-[▶ Motion dial on Pika, 0 to +3](assets/pika_dial_sweep.mp4) · [▶ De-rope vs no de-rope](assets/pika_derope_compare.mp4)
+[▶ Motion dial on Pika, 0 to +3](assets/pika_dial_sweep.mp4) · [▶ De-rope vs no de-rope](assets/pika_derope_compare.mp4) ·
+[▶ Dread 0 / +0.5 / +1 on Pika](assets/pika_dread_compare.mp4)
 
 | workflow | what it does |
 |---|---|
@@ -178,6 +179,15 @@ Keep the **lcm** sampler and the step schedules as they are.
 | +3.0 | +137 % | loses the prompt |
 
 On Pika, **+0.5 to +1.0** is the useful range.
+
+**Evil dials on Pika** (dread with motion +0.5, same prompt and seed; one take each):
+
+| dread | what changes |
+|---|---|
+| +0.5 | darker hall, black armor, the skeleton king lunges off the throne, her grin turns sly |
+| +1.0 | gothic hall, heavy dark plate, a more decayed king and crown; the clash becomes a shockwave |
+
+Both keep the prompt, the characters and the story beats. Any `h3_evil_*` file works in the slot.
 
 **Time** (1280x704, 141 frames, one RTX PRO 6000 Max-Q):
 

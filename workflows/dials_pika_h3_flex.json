@@ -1,6 +1,6 @@
 {
- "last_node_id": 18,
- "last_link_id": 19,
+ "last_node_id": 20,
+ "last_link_id": 21,
  "nodes": [
   {
    "id": 1,
@@ -145,7 +145,7 @@
      "name": "MODEL",
      "type": "MODEL",
      "links": [
-      6
+      4
      ]
     }
    ],
@@ -161,6 +161,90 @@
   },
   {
    "id": 5,
+   "type": "DialsLoadDial",
+   "pos": [
+    -380,
+    320
+   ],
+   "size": [
+    380,
+    120
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "dial",
+     "type": "DIAL",
+     "links": [
+      5
+     ]
+    },
+    {
+     "name": "report",
+     "type": "STRING",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DialsLoadDial"
+   },
+   "widgets_values": [
+    "dials/h3_evil_dread.safetensors"
+   ],
+   "title": "Dial: Evil (pick a flavour)",
+   "color": "#232",
+   "bgcolor": "#353"
+  },
+  {
+   "id": 6,
+   "type": "DialsApplyDial",
+   "pos": [
+    -380,
+    480
+   ],
+   "size": [
+    380,
+    120
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 4
+    },
+    {
+     "name": "dial",
+     "type": "DIAL",
+     "link": 5
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      8
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DialsApplyDial"
+   },
+   "widgets_values": [
+    0.0
+   ],
+   "title": "Evil  (0 off \u2026 +1 obvious)",
+   "color": "#232",
+   "bgcolor": "#353"
+  },
+  {
+   "id": 7,
    "type": "CLIPLoader",
    "pos": [
     -900,
@@ -171,7 +255,7 @@
     152
    ],
    "flags": {},
-   "order": 5,
+   "order": 7,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -179,7 +263,7 @@
      "name": "CLIP",
      "type": "CLIP",
      "links": [
-      4
+      6
      ]
     }
    ],
@@ -193,7 +277,7 @@
    ]
   },
   {
-   "id": 6,
+   "id": 8,
    "type": "VAELoader",
    "pos": [
     -900,
@@ -204,7 +288,7 @@
     96
    ],
    "flags": {},
-   "order": 6,
+   "order": 8,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -212,8 +296,8 @@
      "name": "VAE",
      "type": "VAE",
      "links": [
-      5,
-      14
+      7,
+      16
      ]
     }
    ],
@@ -225,29 +309,29 @@
    ]
   },
   {
-   "id": 7,
+   "id": 9,
    "type": "MiniMaxH3ImageToVideo",
    "pos": [
     -380,
-    320
+    640
    ],
    "size": [
     420,
     744
    ],
    "flags": {},
-   "order": 7,
+   "order": 9,
    "mode": 0,
    "inputs": [
     {
      "name": "clip",
      "type": "CLIP",
-     "link": 4
+     "link": 6
     },
     {
      "name": "vae",
      "type": "VAE",
-     "link": 5
+     "link": 7
     }
    ],
    "outputs": [
@@ -255,14 +339,14 @@
      "name": "positive",
      "type": "CONDITIONING",
      "links": [
-      7
+      9
      ]
     },
     {
      "name": "LATENT",
      "type": "LATENT",
      "links": [
-      12
+      14
      ]
     }
    ],
@@ -278,7 +362,7 @@
    "title": "Prompt (MiniMax H3)"
   },
   {
-   "id": 8,
+   "id": 10,
    "type": "RandomNoise",
    "pos": [
     140,
@@ -289,7 +373,7 @@
     124
    ],
    "flags": {},
-   "order": 8,
+   "order": 10,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -297,7 +381,7 @@
      "name": "NOISE",
      "type": "NOISE",
      "links": [
-      8
+      10
      ]
     }
    ],
@@ -310,7 +394,7 @@
    ]
   },
   {
-   "id": 9,
+   "id": 11,
    "type": "BasicGuider",
    "pos": [
     140,
@@ -321,18 +405,18 @@
     92
    ],
    "flags": {},
-   "order": 9,
+   "order": 11,
    "mode": 0,
    "inputs": [
     {
      "name": "model",
      "type": "MODEL",
-     "link": 6
+     "link": 8
     },
     {
      "name": "conditioning",
      "type": "CONDITIONING",
-     "link": 7
+     "link": 9
     }
    ],
    "outputs": [
@@ -340,7 +424,7 @@
      "name": "GUIDER",
      "type": "GUIDER",
      "links": [
-      9
+      11
      ]
     }
    ],
@@ -350,7 +434,7 @@
    "widgets_values": []
   },
   {
-   "id": 10,
+   "id": 12,
    "type": "KSamplerSelect",
    "pos": [
     140,
@@ -361,7 +445,7 @@
     96
    ],
    "flags": {},
-   "order": 10,
+   "order": 12,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -369,7 +453,7 @@
      "name": "SAMPLER",
      "type": "SAMPLER",
      "links": [
-      10
+      12
      ]
     }
    ],
@@ -384,7 +468,7 @@
    "bgcolor": "#335"
   },
   {
-   "id": 11,
+   "id": 13,
    "type": "ManualSigmas",
    "pos": [
     140,
@@ -395,7 +479,7 @@
     96
    ],
    "flags": {},
-   "order": 11,
+   "order": 13,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -403,7 +487,7 @@
      "name": "SIGMAS",
      "type": "SIGMAS",
      "links": [
-      11
+      13
      ]
     }
    ],
@@ -418,7 +502,7 @@
    "bgcolor": "#335"
   },
   {
-   "id": 12,
+   "id": 14,
    "type": "SamplerCustomAdvanced",
    "pos": [
     140,
@@ -429,33 +513,33 @@
     164
    ],
    "flags": {},
-   "order": 12,
+   "order": 14,
    "mode": 0,
    "inputs": [
     {
      "name": "noise",
      "type": "NOISE",
-     "link": 8
+     "link": 10
     },
     {
      "name": "guider",
      "type": "GUIDER",
-     "link": 9
+     "link": 11
     },
     {
      "name": "sampler",
      "type": "SAMPLER",
-     "link": 10
+     "link": 12
     },
     {
      "name": "sigmas",
      "type": "SIGMAS",
-     "link": 11
+     "link": 13
     },
     {
      "name": "latent_image",
      "type": "LATENT",
-     "link": 12
+     "link": 14
     }
    ],
    "outputs": [
@@ -463,8 +547,8 @@
      "name": "output",
      "type": "LATENT",
      "links": [
-      13,
-      16
+      15,
+      18
      ]
     },
     {
@@ -479,83 +563,11 @@
    "widgets_values": []
   },
   {
-   "id": 13,
+   "id": 15,
    "type": "VAEDecode",
    "pos": [
     140,
     772
-   ],
-   "size": [
-    420,
-    92
-   ],
-   "flags": {},
-   "order": 13,
-   "mode": 0,
-   "inputs": [
-    {
-     "name": "samples",
-     "type": "LATENT",
-     "link": 13
-    },
-    {
-     "name": "vae",
-     "type": "VAE",
-     "link": 14
-    }
-   ],
-   "outputs": [
-    {
-     "name": "IMAGE",
-     "type": "IMAGE",
-     "links": [
-      15
-     ]
-    }
-   ],
-   "properties": {
-    "Node name for S&R": "VAEDecode"
-   },
-   "widgets_values": []
-  },
-  {
-   "id": 14,
-   "type": "VAELoader",
-   "pos": [
-    -900,
-    656
-   ],
-   "size": [
-    320,
-    96
-   ],
-   "flags": {},
-   "order": 14,
-   "mode": 0,
-   "inputs": [],
-   "outputs": [
-    {
-     "name": "VAE",
-     "type": "VAE",
-     "links": [
-      17
-     ]
-    }
-   ],
-   "properties": {
-    "Node name for S&R": "VAELoader"
-   },
-   "widgets_values": [
-    "minimax_h3_audio_vae_fp32.safetensors"
-   ],
-   "title": "Audio VAE"
-  },
-  {
-   "id": 15,
-   "type": "VAEDecodeAudio",
-   "pos": [
-    140,
-    904
    ],
    "size": [
     420,
@@ -568,12 +580,84 @@
     {
      "name": "samples",
      "type": "LATENT",
-     "link": 16
+     "link": 15
     },
     {
      "name": "vae",
      "type": "VAE",
-     "link": 17
+     "link": 16
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      17
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 16,
+   "type": "VAELoader",
+   "pos": [
+    -900,
+    656
+   ],
+   "size": [
+    320,
+    96
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      19
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "minimax_h3_audio_vae_fp32.safetensors"
+   ],
+   "title": "Audio VAE"
+  },
+  {
+   "id": 17,
+   "type": "VAEDecodeAudio",
+   "pos": [
+    140,
+    904
+   ],
+   "size": [
+    420,
+    92
+   ],
+   "flags": {},
+   "order": 17,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 18
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 19
     }
    ],
    "outputs": [
@@ -581,7 +665,7 @@
      "name": "AUDIO",
      "type": "AUDIO",
      "links": [
-      18
+      20
      ]
     }
    ],
@@ -591,7 +675,7 @@
    "widgets_values": []
   },
   {
-   "id": 16,
+   "id": 18,
    "type": "CreateVideo",
    "pos": [
     140,
@@ -602,18 +686,18 @@
     148
    ],
    "flags": {},
-   "order": 16,
+   "order": 18,
    "mode": 0,
    "inputs": [
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 15
+     "link": 17
     },
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": 18
+     "link": 20
     }
    ],
    "outputs": [
@@ -621,7 +705,7 @@
      "name": "VIDEO",
      "type": "VIDEO",
      "links": [
-      19
+      21
      ]
     }
    ],
@@ -634,7 +718,7 @@
    ]
   },
   {
-   "id": 17,
+   "id": 19,
    "type": "SaveVideo",
    "pos": [
     140,
@@ -645,13 +729,13 @@
     152
    ],
    "flags": {},
-   "order": 17,
+   "order": 19,
    "mode": 0,
    "inputs": [
     {
      "name": "video",
      "type": "VIDEO",
-     "link": 19
+     "link": 21
     }
    ],
    "outputs": [],
@@ -665,7 +749,7 @@
    ]
   },
   {
-   "id": 18,
+   "id": 20,
    "type": "MarkdownNote",
    "pos": [
     -900,
@@ -676,7 +760,7 @@
     560
    ],
    "flags": {},
-   "order": 18,
+   "order": 20,
    "mode": 0,
    "inputs": [],
    "outputs": [],
@@ -684,7 +768,7 @@
     "Node name for S&R": "MarkdownNote"
    },
    "widgets_values": [
-    "**Pika H3 Flex + Dials \u2014 MiniMax H3, 6 steps**\n\nPika H3 Flex is a 6-step, no-CFG LoRA for MiniMax H3. Keep the **lcm** sampler and the **6-step schedule** as they are; the motion dial sits between the LoRA and the sampler. Size: 1280x704 (about 0.9 MP).\n\n**Motion dial on Pika** (1280x704, spellblade prompt, seed 42, one take per strength; camera-removed optical flow):\n- **+0.5**: +20 % motion, same scene.\n- **+1.0**: +23 %, still the same scene.\n- **+1.5 / +2.0**: about +90 %; the scene restages and characters morph.\n- **+3**: loses the prompt.\n\n**No background music:** write `non_diegetic_music: N/A` (Pika's prompt guide).\n\n**Models:** the LoRA is `loras/pika_h3_flex_fl2va_v1_bf16.safetensors` in [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3) (same weights as [Pika-Labs/Pika-H3-Flex](https://huggingface.co/Pika-Labs/Pika-H3-Flex) `comfy/loras/`). Base model, text encoder and VAEs as in the other Dials workflows."
+    "**Pika H3 Flex + Dials \u2014 MiniMax H3, 6 steps**\n\nPika H3 Flex is a 6-step, no-CFG LoRA for MiniMax H3. Keep the **lcm** sampler and the **6-step schedule** as they are; the motion dial sits between the LoRA and the sampler. Size: 1280x704 (about 0.9 MP).\n\n**Motion dial on Pika** (1280x704, spellblade prompt, seed 42, one take per strength; camera-removed optical flow):\n- **+0.5**: +20 % motion, same scene.\n- **+1.0**: +23 %, still the same scene.\n- **+1.5 / +2.0**: about +90 %; the scene restages and characters morph.\n- **+3**: loses the prompt.\n\n**Evil** (off at 0): dread +0.5 to +1 darkens the scene and turns the characters menacing while keeping the prompt. Other flavours: pick another `h3_evil_*` file.\n\n**No background music:** write `non_diegetic_music: N/A` (Pika's prompt guide).\n\n**Models:** the LoRA is `loras/pika_h3_flex_fl2va_v1_bf16.safetensors` in [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3) (same weights as [Pika-Labs/Pika-H3-Flex](https://huggingface.co/Pika-Labs/Pika-H3-Flex) `comfy/loras/`). Base model, text encoder and VAEs as in the other Dials workflows."
    ]
   }
  ],
@@ -715,129 +799,145 @@
   ],
   [
    4,
-   5,
-   0,
-   7,
-   0,
-   "CLIP"
-  ],
-  [
-   5,
-   6,
-   0,
-   7,
-   1,
-   "VAE"
-  ],
-  [
-   6,
    4,
    0,
-   9,
+   6,
    0,
    "MODEL"
   ],
   [
-   7,
+   5,
+   5,
+   0,
+   6,
+   1,
+   "DIAL"
+  ],
+  [
+   6,
    7,
    0,
    9,
+   0,
+   "CLIP"
+  ],
+  [
+   7,
+   8,
+   0,
+   9,
+   1,
+   "VAE"
+  ],
+  [
+   8,
+   6,
+   0,
+   11,
+   0,
+   "MODEL"
+  ],
+  [
+   9,
+   9,
+   0,
+   11,
    1,
    "CONDITIONING"
   ],
   [
-   8,
-   8,
+   10,
+   10,
    0,
-   12,
+   14,
    0,
    "NOISE"
   ],
   [
-   9,
-   9,
+   11,
+   11,
    0,
-   12,
+   14,
    1,
    "GUIDER"
   ],
   [
-   10,
-   10,
-   0,
    12,
+   12,
+   0,
+   14,
    2,
    "SAMPLER"
   ],
   [
-   11,
-   11,
+   13,
+   13,
    0,
-   12,
+   14,
    3,
    "SIGMAS"
   ],
   [
-   12,
-   7,
+   14,
+   9,
    1,
-   12,
+   14,
    4,
    "LATENT"
   ],
   [
-   13,
-   12,
+   15,
+   14,
    0,
-   13,
+   15,
    0,
    "LATENT"
   ],
   [
-   14,
-   6,
+   16,
+   8,
    0,
-   13,
+   15,
    1,
    "VAE"
   ],
   [
+   17,
    15,
-   13,
    0,
-   16,
+   18,
    0,
    "IMAGE"
   ],
   [
-   16,
-   12,
-   0,
-   15,
-   0,
-   "LATENT"
-  ],
-  [
-   17,
+   18,
    14,
    0,
-   15,
-   1,
-   "VAE"
-  ],
-  [
-   18,
-   15,
+   17,
    0,
-   16,
-   1,
-   "AUDIO"
+   "LATENT"
   ],
   [
    19,
    16,
    0,
    17,
+   1,
+   "VAE"
+  ],
+  [
+   20,
+   17,
+   0,
+   18,
+   1,
+   "AUDIO"
+  ],
+  [
+   21,
+   18,
+   0,
+   19,
    0,
    "VIDEO"
   ]
@@ -860,7 +960,7 @@
     -400,
     -84,
     460,
-    1168
+    1488
    ],
    "color": "#4f3f59",
    "font_size": 24

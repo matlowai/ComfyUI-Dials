@@ -191,6 +191,8 @@ def add_groups(g, spec):
 PIKA_DIAL_NOTE = ("**Motion dial on Pika** (1280x704, spellblade prompt, seed 42, one take per strength; camera-removed "
                   "optical flow):\n- **+0.5**: +20 % motion, same scene.\n- **+1.0**: +23 %, still the same scene.\n"
                   "- **+1.5 / +2.0**: about +90 %; the scene restages and characters morph.\n- **+3**: loses the prompt.\n\n"
+                  "**Evil** (off at 0): dread +0.5 to +1 darkens the scene and turns the characters menacing while keeping "
+                  "the prompt. Other flavours: pick another `h3_evil_*` file.\n\n"
                   "**No background music:** write `non_diegetic_music: N/A` (Pika's prompt guide).\n\n"
                   "**Models:** the LoRA is `loras/pika_h3_flex_fl2va_v1_bf16.safetensors` in "
                   "[Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3) (same weights as "
@@ -203,7 +205,7 @@ PIKA_DEROPE_6PLUS6_SIGMAS = "0.917197, 0.870968, 0.791209, 0.62069, 0.376963, 0.
 
 
 def pika_front(g):
-    """Base model -> Pika LoRA -> motion dial. Returns the dialed MODEL node."""
+    """Base model -> Pika LoRA -> motion dial -> evil dial (off). Returns the dialed MODEL node."""
     unet = g.node("UNETLoader", "left", 320, [UNET, "default"], outputs=[("MODEL", "MODEL")], api={"unet_name": UNET, "weight_dtype": "default"})
     lora = g.node("LoraLoaderModelOnly", "left", 320, [PIKA_LORA, 1.0], inputs=[("model", "MODEL", None)], outputs=[("MODEL", "MODEL")],
                   api={"lora_name": PIKA_LORA, "strength_model": 1.0}, title="Pika H3 Flex LoRA (FL2VA)", color=BLUE)
@@ -212,9 +214,15 @@ def pika_front(g):
                     api={"dial_name": "dials/h3_motion.safetensors"}, title="Dial: Freeze ↔ Zoomies", color=PURPLE)
     m_apply = g.node("DialsApplyDial", "mid", 380, [0.5], inputs=[("model", "MODEL", None), ("dial", "DIAL", None)],
                      outputs=[("MODEL", "MODEL")], api={"strength": 0.5}, title="Motion  (+0.5 a bit more … +1 a lot)", color=PURPLE)
+    e_dial = g.node("DialsLoadDial", "mid", 380, ["dials/h3_evil_dread.safetensors"], outputs=[("dial", "DIAL"), ("report", "STRING")],
+                    api={"dial_name": "dials/h3_evil_dread.safetensors"}, title="Dial: Evil (pick a flavour)", color=GREEN)
+    e_apply = g.node("DialsApplyDial", "mid", 380, [0.0], inputs=[("model", "MODEL", None), ("dial", "DIAL", None)],
+                     outputs=[("MODEL", "MODEL")], api={"strength": 0.0}, title="Evil  (0 off … +1 obvious)", color=GREEN)
     g.link(lora, 0, m_apply, "model")
     g.link(m_dial, 0, m_apply, "dial")
-    return m_apply
+    g.link(m_apply, 0, e_apply, "model")
+    g.link(e_dial, 0, e_apply, "dial")
+    return e_apply
 
 
 def pika():

@@ -38,12 +38,32 @@
   }
  },
  "5": {
+  "class_type": "DialsLoadDial",
+  "inputs": {
+   "dial_name": "dials/h3_evil_dread.safetensors"
+  }
+ },
+ "6": {
+  "class_type": "DialsApplyDial",
+  "inputs": {
+   "strength": 0.0,
+   "model": [
+    "4",
+    0
+   ],
+   "dial": [
+    "5",
+    0
+   ]
+  }
+ },
+ "7": {
   "class_type": "PrimitiveStringMultiline",
   "inputs": {
    "value": "integrated_multimodal_description: [Shot 1] 2D anime, cel-shaded, cinematic, a ruined stone throne hall lit by green torch flames, dust hanging in the shafts of light. A cute young magical girl spellblade with big bright eyes, long silver twin tails and a confident grin, wearing ornate fantasy plate armor with a small breastplate, pauldrons, gauntlets and thigh-high boots, sprints straight at a towering skeleton king slumped on a throne of bones, its rusted iron crown tilted, a huge notched cleaver resting in its bony fist. Glowing blue runes ignite along her longsword as she runs. She launches a fast three-strike combination without slowing: a low sweeping slash that throws sparks off the throne steps, a rising diagonal cut that shears through the king's raised forearm so the bones burst apart in a spray of splinters, and a spinning overhead strike that detonates a burst of blue arcane fire on impact as the king catches it on the flat of its cleaver with a hard metallic clang. The camera tracks with her in a fast lateral arc around the throne at chest height, matching her speed, then snaps to a tight two-shot as the blades lock, blue rune light and green flame reflections sliding across both weapons and her armor. The king's jaw drops open in a silent roar and its skull tilts down toward her; she keeps grinning. Bone fragments, sparks and blue embers scatter through the frame and settle on the flagstones. Every frame is crisp and sharp as if shot at a very high shutter speed, with fine detail held on the blade runes, the armor edges, her twin tails and the flying bone splinters throughout the movement.\n\noverall_soundscape: Rapid footfalls on flagstone under a full sprint; a rising crystalline hum as the runes ignite; three sharp steel impacts in fast succession, the first with a scrape of sparks off stone, the second with dry bone cracking and splinters skittering across the floor, the third a deep ringing clang wrapped in a whooshing burst of arcane fire that decays slowly; the low roar and flutter of torch flames throughout; a rumbling exhale of dust and grit from the throne as the king leans forward.\n\nnon_diegetic_music: N/A"
   }
  },
- "6": {
+ "8": {
   "class_type": "CLIPLoader",
   "inputs": {
    "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
@@ -51,147 +71,147 @@
    "device": "default"
   }
  },
- "7": {
+ "9": {
   "class_type": "VAELoader",
   "inputs": {
    "vae_name": "minimax_h3_video_vae_fp16.safetensors"
   }
  },
- "8": {
+ "10": {
   "class_type": "MiniMaxH3ImageToVideo",
   "inputs": {
    "width": 1280,
    "height": 704,
    "length": 141,
    "prompt": [
-    "5",
+    "7",
     0
    ],
    "clip": [
-    "6",
+    "8",
     0
    ],
    "vae": [
-    "7",
-    0
-   ]
-  }
- },
- "9": {
-  "class_type": "RandomNoise",
-  "inputs": {
-   "noise_seed": 42
-  }
- },
- "10": {
-  "class_type": "BasicGuider",
-  "inputs": {
-   "model": [
-    "4",
-    0
-   ],
-   "conditioning": [
-    "8",
+    "9",
     0
    ]
   }
  },
  "11": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 42
+  }
+ },
+ "12": {
+  "class_type": "BasicGuider",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "conditioning": [
+    "10",
+    0
+   ]
+  }
+ },
+ "13": {
   "class_type": "KSamplerSelect",
   "inputs": {
    "sampler_name": "lcm"
   }
  },
- "12": {
+ "14": {
   "class_type": "ManualSigmas",
   "inputs": {
    "sigmas": "1.0, 0.972973, 0.923077, 0.8, 0.571429, 0.333333, 0.0"
   }
  },
- "13": {
+ "15": {
   "class_type": "SamplerCustomAdvanced",
   "inputs": {
    "noise": [
-    "9",
-    0
-   ],
-   "guider": [
-    "10",
-    0
-   ],
-   "sampler": [
     "11",
     0
    ],
-   "sigmas": [
+   "guider": [
     "12",
     0
    ],
+   "sampler": [
+    "13",
+    0
+   ],
+   "sigmas": [
+    "14",
+    0
+   ],
    "latent_image": [
-    "8",
+    "10",
     1
    ]
   }
  },
- "14": {
+ "16": {
   "class_type": "VAEDecode",
   "inputs": {
    "samples": [
-    "13",
-    0
-   ],
-   "vae": [
-    "7",
-    0
-   ]
-  }
- },
- "15": {
-  "class_type": "VAELoader",
-  "inputs": {
-   "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
-  }
- },
- "16": {
-  "class_type": "VAEDecodeAudio",
-  "inputs": {
-   "samples": [
-    "13",
-    0
-   ],
-   "vae": [
     "15",
+    0
+   ],
+   "vae": [
+    "9",
     0
    ]
   }
  },
  "17": {
-  "class_type": "CreateVideo",
+  "class_type": "VAELoader",
   "inputs": {
-   "fps": 24.0,
-   "images": [
-    "14",
+   "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+  }
+ },
+ "18": {
+  "class_type": "VAEDecodeAudio",
+  "inputs": {
+   "samples": [
+    "15",
     0
    ],
-   "audio": [
-    "16",
+   "vae": [
+    "17",
     0
    ]
   }
  },
- "18": {
+ "19": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "fps": 24.0,
+   "images": [
+    "16",
+    0
+   ],
+   "audio": [
+    "18",
+    0
+   ]
+  }
+ },
+ "20": {
   "class_type": "SaveVideo",
   "inputs": {
    "filename_prefix": "video/dials_pika_plain",
    "format": "mp4",
    "codec": "h264",
    "video": [
-    "17",
+    "19",
     0
    ]
   }
  },
- "20": {
+ "22": {
   "class_type": "H3JerkOracle",
   "inputs": {
    "length": 141,
@@ -200,244 +220,244 @@
    "ramp": true,
    "bridge": 8,
    "samples": [
-    "13",
-    0
-   ]
-  }
- },
- "21": {
-  "class_type": "H3ClockRemap",
-  "inputs": {
-   "model_profile": "minimax-h3",
-   "hold_map": [
-    "20",
-    0
-   ]
-  }
- },
- "22": {
-  "class_type": "H3TimeSmear",
-  "inputs": {
-   "dilation": 4,
-   "images": [
-    "14",
-    0
-   ],
-   "hold_map": [
-    "21",
+    "15",
     0
    ]
   }
  },
  "23": {
-  "class_type": "H3AudioSmear",
+  "class_type": "H3ClockRemap",
   "inputs": {
-   "fps": 24,
-   "audio": [
-    "16",
-    0
-   ],
+   "model_profile": "minimax-h3",
    "hold_map": [
     "22",
-    1
+    0
    ]
   }
  },
  "24": {
-  "class_type": "VAEEncodeAudio",
+  "class_type": "H3TimeSmear",
   "inputs": {
-   "audio": [
-    "23",
+   "dilation": 4,
+   "images": [
+    "16",
     0
    ],
-   "vae": [
-    "15",
+   "hold_map": [
+    "23",
     0
    ]
   }
  },
  "25": {
-  "class_type": "VAEEncode",
+  "class_type": "H3AudioSmear",
   "inputs": {
-   "pixels": [
-    "22",
+   "fps": 24,
+   "audio": [
+    "18",
     0
    ],
-   "vae": [
-    "7",
-    0
+   "hold_map": [
+    "24",
+    1
    ]
   }
  },
  "26": {
-  "class_type": "H3V2VInit",
+  "class_type": "VAEEncodeAudio",
   "inputs": {
-   "audio_mode": "follow the original performance (0.5)",
-   "audio_strength": 0.5,
-   "samples": [
+   "audio": [
     "25",
     0
    ],
-   "audio_latent": [
-    "24",
+   "vae": [
+    "17",
     0
    ]
   }
  },
  "27": {
-  "class_type": "MiniMaxH3ImageToVideo",
+  "class_type": "VAEEncode",
   "inputs": {
-   "width": 1280,
-   "height": 704,
-   "clip": [
-    "6",
+   "pixels": [
+    "24",
     0
    ],
    "vae": [
-    "7",
+    "9",
     0
-   ],
-   "prompt": [
-    "5",
-    0
-   ],
-   "length": [
-    "22",
-    2
    ]
   }
  },
  "28": {
-  "class_type": "RandomNoise",
+  "class_type": "H3V2VInit",
   "inputs": {
-   "noise_seed": 43
-  }
- },
- "29": {
-  "class_type": "BasicGuider",
-  "inputs": {
-   "model": [
-    "4",
-    0
-   ],
-   "conditioning": [
+   "audio_mode": "follow the original performance (0.5)",
+   "audio_strength": 0.5,
+   "samples": [
     "27",
     0
-   ]
-  }
- },
- "30": {
-  "class_type": "ManualSigmas",
-  "inputs": {
-   "sigmas": "0.917197, 0.870968, 0.791209, 0.62069, 0.376963, 0.190225, 0.0"
-  }
- },
- "31": {
-  "class_type": "SamplerCustomAdvanced",
-  "inputs": {
-   "noise": [
-    "28",
-    0
    ],
-   "guider": [
-    "29",
-    0
-   ],
-   "sampler": [
-    "11",
-    0
-   ],
-   "sigmas": [
-    "30",
-    0
-   ],
-   "latent_image": [
+   "audio_latent": [
     "26",
     0
    ]
   }
  },
- "32": {
-  "class_type": "VAEDecode",
+ "29": {
+  "class_type": "MiniMaxH3ImageToVideo",
   "inputs": {
-   "samples": [
-    "31",
+   "width": 1280,
+   "height": 704,
+   "clip": [
+    "8",
     0
    ],
    "vae": [
+    "9",
+    0
+   ],
+   "prompt": [
     "7",
+    0
+   ],
+   "length": [
+    "24",
+    2
+   ]
+  }
+ },
+ "30": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 43
+  }
+ },
+ "31": {
+  "class_type": "BasicGuider",
+  "inputs": {
+   "model": [
+    "6",
+    0
+   ],
+   "conditioning": [
+    "29",
     0
    ]
   }
  },
- "33": {
-  "class_type": "VAEDecodeAudio",
+ "32": {
+  "class_type": "ManualSigmas",
   "inputs": {
-   "samples": [
+   "sigmas": "0.917197, 0.870968, 0.791209, 0.62069, 0.376963, 0.190225, 0.0"
+  }
+ },
+ "33": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "30",
+    0
+   ],
+   "guider": [
     "31",
     0
    ],
-   "vae": [
-    "15",
+   "sampler": [
+    "13",
+    0
+   ],
+   "sigmas": [
+    "32",
+    0
+   ],
+   "latent_image": [
+    "28",
     0
    ]
   }
  },
  "34": {
-  "class_type": "H3ExactRecover",
+  "class_type": "VAEDecode",
   "inputs": {
-   "images": [
-    "32",
+   "samples": [
+    "33",
     0
    ],
-   "hold_map": [
-    "22",
-    1
+   "vae": [
+    "9",
+    0
    ]
   }
  },
  "35": {
+  "class_type": "VAEDecodeAudio",
+  "inputs": {
+   "samples": [
+    "33",
+    0
+   ],
+   "vae": [
+    "17",
+    0
+   ]
+  }
+ },
+ "36": {
+  "class_type": "H3ExactRecover",
+  "inputs": {
+   "images": [
+    "34",
+    0
+   ],
+   "hold_map": [
+    "24",
+    1
+   ]
+  }
+ },
+ "37": {
   "class_type": "H3AudioRecover",
   "inputs": {
    "fps": 24,
    "reference_mix": 1.0,
    "audio_source": "keep the original performance (safe default)",
    "audio": [
-    "33",
+    "35",
     0
    ],
    "hold_map": [
-    "22",
+    "24",
     1
    ],
    "reference": [
-    "16",
+    "18",
     0
    ]
   }
  },
- "36": {
+ "38": {
   "class_type": "CreateVideo",
   "inputs": {
    "fps": 24.0,
    "images": [
-    "34",
+    "36",
     0
    ],
    "audio": [
-    "35",
+    "37",
     0
    ]
   }
  },
- "37": {
+ "39": {
   "class_type": "SaveVideo",
   "inputs": {
    "filename_prefix": "video/dials_pika_derope",
    "format": "mp4",
    "codec": "h264",
    "video": [
-    "36",
+    "38",
     0
    ]
   }
