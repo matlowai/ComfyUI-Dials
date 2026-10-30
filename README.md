@@ -22,6 +22,17 @@ dread, impish). See [Released dials](#released-dials-dials).
 
 [▶ Full demo video (three prompts)](assets/motion_dial_demo.mp4)
 
+### On Pika H3 Flex, with de-rope
+
+<a href="assets/pika_dread_derope_column.mp4"><img src="assets/pika_dread_derope_column.gif" width="300"
+alt="Top to bottom: MiniMax H3 base at 25 steps; Pika H3 Flex with motion +0.5 and de-rope at dread 0, +0.5 and +1"></a>
+
+Top to bottom: MiniMax H3 base, 25 steps, no de-rope; then [Pika H3 Flex](https://huggingface.co/Pika-Labs/Pika-H3-Flex)
+(6 steps) with motion +0.5 and de-rope, at dread 0, +0.5 and +1. Same prompt and seed. A de-roped Pika clip takes about
+as long as one 25-step base render (about 6 min at 1280x704 on one RTX PRO 6000 Max-Q) and comes out with more motion
+and crisper frames. [▶ Full video with timings, motion and sharpness](assets/pika_dread_derope_column.mp4) ·
+[workflows](#pika-h3-flex--dials)
+
 - **No training, no reference images, no rendering** needed to make a dial. Building one takes about a minute (one
   text-encoder pass per prompt).
 - **~14 KB per dial.** A typical video LoRA is 80–160 MB.
