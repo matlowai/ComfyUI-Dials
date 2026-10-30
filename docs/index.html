@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dials · steering for MiniMax H3</title>
+<meta name="description" content="Training-free steering dials for MiniMax H3, made from prompt pairs. ComfyUI nodes, ~14 KB per dial.">
+<meta property="og:title" content="Dials · training-free steering for MiniMax H3">
+<meta property="og:description" content="Write two prompts, get a ~14 KB slider. Motion, a villainy pack, and Pika H3 Flex workflows with de-rope.">
+<meta property="og:image" content="https://matlowai.github.io/ComfyUI-Dials/poster.jpg">
+<style>
+  :root {
+    --bg: #0e0f13; --panel: #171920; --line: #25262c; --fg: #f2f2f0; --muted: #9a9ba0;
+    --gold: #ffc145; --blue: #4f8ff7; --warn: #f08a4b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 0 16px 64px; }
+  header { padding: 56px 0 24px; }
+  h1 { font-size: clamp(44px, 9vw, 84px); line-height: 1; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .tag { color: var(--gold); font-size: clamp(19px, 3vw, 24px); margin: 0 0 20px; }
+  h2 { font-size: 28px; margin: 56px 0 12px; }
+  p { margin: 0 0 14px; }
+  a { color: var(--blue); }
+  .buttons { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 28px; }
+  .btn { display: inline-block; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel);
+         color: var(--fg); text-decoration: none; font-weight: 600; }
+  .btn.primary { background: var(--gold); color: #141519; border-color: var(--gold); }
+  video { width: 100%; border-radius: 14px; border: 1px solid var(--line); background: #000; display: block; }
+  .caption { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 18px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .card b { display: block; margin-bottom: 4px; }
+  .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 16px; }
+  figure { margin: 0; }
+  figure img { width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+  figcaption { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 8px; font-size: 16px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  th { color: var(--muted); font-weight: 600; }
+  td.hi { color: var(--gold); font-weight: 700; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; }
+  pre { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; overflow-x: auto; }
+  .warn { color: var(--warn); }
+  ol li, ul li { margin-bottom: 6px; }
+  footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 56px; padding-top: 20px; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Dials</h1>
+  <p class="tag">Training-free steering for MiniMax H3, made from prompt pairs.</p>
+  <p>Write two prompts that differ in one quality, such as <em>"stands perfectly still"</em> and <em>"runs across the scene"</em>.
+    Dials turns the difference into a <b>~14 KB file</b> that works like a strength slider in ComfyUI. Negative strength moves
+    every generation toward the first prompt, positive toward the second.</p>
+  <div class="buttons">
+    <a class="btn primary" href="https://github.com/matlowai/ComfyUI-Dials">ComfyUI nodes on GitHub</a>
+    <a class="btn" href="https://huggingface.co/MATLOWAI/H3-Dials">Dial library on Hugging Face</a>
+    <a class="btn" href="https://github.com/matlowai/ComfyUI-Dials/tree/main/workflows">Workflows</a>
+  </div>
+</header>
+
+<video controls preload="metadata" poster="poster.jpg" src="dials_demo.mp4"></video>
+<p class="caption">Demo, 1:57. Every video shot was rendered locally with MiniMax H3 and Pika H3 Flex in ComfyUI, and the narration was
+  voiced by MiniMax H3 too. Captions are burned in.</p>
+
+<h2>What a dial is</h2>
+<div class="cards">
+  <div class="card"><b>Prompt pairs in, a slider out</b>No training and no rendering to make one. About a minute: one text-encoder
+    pass per prompt, averaged into one direction.</div>
+  <div class="card"><b>Added where H3 reads the prompt</b>One vector, added to every prompt token right after H3's token refiner.
+    Strength is the slider.</div>
+  <div class="card"><b>Stacks with everything</b>Combine dials with each other, with LoRAs, and with Pika H3 Flex's 6-step LoRA.</div>
+</div>
+
+<h2>How it started</h2>
+<p>DaveSnow's Natural_detailV2 dataset is 122 beautiful, perfectly still photos. An H3 LoRA trained on stills costs about
+  20&nbsp;% of subject motion. His trick of training only every other block behaved like turning the LoRA down to about 0.7:
+  the same trade at a smaller dose.</p>
+<p>Every post-hoc edit we tried (block subsets, factor splits, activation projections, timestep schedules) landed back on that
+  same strength curve. Untangling the weights would take far more time, so the question became: is there anything less
+  tangled to play with? The prompt is. In prompt space, an idea like motion is one direction.</p>
+<div class="gallery">
+  <figure><img src="img/idea.jpg" alt="Anime fennec-eared mascot grinning at a single straight glowing thread in front of a giant tangle"><figcaption>The tangle, and the one straight thread.</figcaption></figure>
+  <figure><img src="img/chart.jpg" alt="Trade-off chart: LoRA plus motion dial +1 lands above the strength curve"><figcaption>His LoRA plus the motion dial at +1 leaves the curve.</figcaption></figure>
+</div>
+
+<h2>Measured</h2>
+<div class="table-wrap"><table>
+  <tr><th>motion dial on base H3</th><th>motion vs base</th></tr>
+  <tr><td>−2</td><td>0.05× (near-frozen, cinemagraph-like)</td></tr>
+  <tr><td>+2</td><td>about 2.7× (everything zooms)</td></tr>
+</table></div>
+<div class="table-wrap"><table>
+  <tr><th>with DaveSnow's detail LoRA (12 clips, vs base)</th><th>subject motion</th><th>detail</th></tr>
+  <tr><td>LoRA alone</td><td>0.81×</td><td>1.80×</td></tr>
+  <tr><td>LoRA + motion dial +1</td><td class="hi">1.33×</td><td class="hi">1.22×</td></tr>
+</table></div>
+<p>At +1 you get more motion <em>and</em> more of the LoRA's look than the base model. <b>+0.5 to +1</b> is the sane range for
+  everyday use; above about 1.5, side effects appear.</p>
+
+<h2>Pika H3 Flex, with de-rope</h2>
+<p>The dials work unchanged on <a href="https://huggingface.co/Pika-Labs/Pika-H3-Flex">Pika H3 Flex</a>, a 6-step LoRA for H3.
+  De-rope finds stretches that move too fast for the frame rate, slows them, re-renders and maps the clip back to real time.</p>
+<figure><img src="img/derope.jpg" alt="Four panels: base H3 at 25 steps, and Pika plus de-rope at dread 0, +0.5 and +1"></figure>
+<div class="table-wrap"><table>
+  <tr><th>1280×704, 141 frames, seed 42, one RTX PRO 6000 Max-Q</th><th>time</th><th>motion (px/frame)</th><th>sharpness</th></tr>
+  <tr><td>MiniMax H3 base, 25 steps, no de-rope</td><td>326 s</td><td>2.25</td><td>348</td></tr>
+  <tr><td>Pika + de-rope, motion +0.5, dread 0</td><td>393 s</td><td>2.44</td><td class="hi">477</td></tr>
+  <tr><td>Pika + de-rope, motion +0.5, dread +0.5</td><td>370 s</td><td>2.56</td><td class="hi">473</td></tr>
+  <tr><td>Pika + de-rope, motion +0.5, dread +1</td><td>369 s</td><td>2.58</td><td class="hi">445</td></tr>
+</table></div>
+<p class="caption">Motion: camera-removed optical flow. Sharpness: variance of the Laplacian (higher is crisper). One take each.
+  Individual clips: <a href="https://huggingface.co/MATLOWAI/H3-Dials/tree/main/examples/pika_dread_derope">Hugging Face examples</a>.</p>
+
+<h2>Villainy pack</h2>
+<p>Eight evil flavours, each its own direction: sinister, creepy, cold, unhinged, seductive, corrupted, dread and impish.
+  <b>+1 to +2</b> is the sweet spot.</p>
+<figure><img src="img/villainy.jpg" alt="Library scene: base, dread, creepy and sinister at +2"></figure>
+<ul>
+  <li class="warn">Sinister tends to crush speech audio (dials steer H3's sound too). Keep it low for clear dialogue.</li>
+  <li class="warn">Unhinged really is unhinged: it leans aggressive even at +2.</li>
+</ul>
+
+<h2>Get started</h2>
+<ol>
+  <li>Install the nodes (no extra dependencies):
+<pre>cd ComfyUI/custom_nodes
+git clone https://github.com/matlowai/ComfyUI-Dials</pre></li>
+  <li>Copy the dial files (<code>dials/*.safetensors</code>, from the repo or
+    <a href="https://huggingface.co/MATLOWAI/H3-Dials">Hugging Face</a>) into <code>ComfyUI/models/loras/dials/</code>.</li>
+  <li>Load a workflow: <code>dials_studio_h3.json</code> (motion + evil sliders), <code>dial_maker_h3.json</code> (make your
+    own), or <code>dials_pika_h3_flex*.json</code> (Pika, with and without de-rope).</li>
+</ol>
+<p>Needs MiniMax H3 in ComfyUI (Comfy-Org repack). The de-rope workflows also need
+  <a href="https://github.com/matlowai/ComfyUI-MAINodes">ComfyUI-MAINodes</a>.</p>
+<div class="gallery">
+  <figure><img src="img/knob.jpg" alt="Anime fennec-eared mascot turning a giant brass knob"><figcaption>Turn one knob.</figcaption></figure>
+</div>
+
+<footer>
+  <p><b>Thanks</b> to DaveSnow for the Natural_detailV2 dataset and the every-other-block observation that started this; to
+    Comfy-Org (ComfyUI and the H3 repack), MiniMax (H3), Pika (H3 Flex), ostris (ai-toolkit) and the H3 community Discord.</p>
+  <p><b>Licenses:</b> code, workflows and docs are AGPL-3.0. Only the dial weight files (<code>dials/*.safetensors</code> and
+    dials you make) fall under the MiniMax H3 Community License Agreement. Demo narration: MiniMax H3 voiced from VCTK
+    speaker p302 (CC BY 4.0). Powered by MiniMax H3.</p>
+  <p>MatlowAI · 2026</p>
+</footer>
+</main>
+</body>
+</html>

@@ -1,5 +1,7 @@
 # ComfyUI-Dials
 
+**[▶ Demo video and project page](https://matlowai.github.io/ComfyUI-Dials/)**
+
 **Training-free steering dials for MiniMax H3, made from prompt pairs.** Write two prompts that differ in one quality,
 for example *"stands perfectly still"* vs *"runs across the scene"*. Dials turns the difference into a **~14 KB file**
 that works like a strength slider:
