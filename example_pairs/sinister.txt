@@ -1,0 +1,3 @@
+{subject} stands in the room with a warm, friendly presence, soft even lighting on their face. ||| {subject} stands in the room with a sinister, menacing presence, deep shadows across their face.
+{subject} looks up at the camera with a kind, open expression. ||| {subject} looks up at the camera with a cold, threatening stare from the shadows.
+{subject} walks slowly toward the viewer in a gentle, welcoming way. ||| {subject} walks slowly toward the viewer in a looming, predatory, menacing way.

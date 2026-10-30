@@ -1,0 +1,3 @@
+{subject} in a clean, bright, healthy room with fresh flowers. ||| {subject} in a decaying, corrupted room, dark rot spreading over the walls and wilted flowers.
+{subject} under warm sunlight, everything vibrant and alive. ||| {subject} under sickly light, everything withered, tainted and slowly corrupting.
+{subject} with clear, healthy skin and bright eyes. ||| {subject} with pallid skin and darkened eyes, touched by a creeping corruption.

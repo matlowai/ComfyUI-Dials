@@ -1,0 +1,3 @@
+{subject} behaves politely and innocently. ||| {subject} grins mischievously, clearly plotting a playful trick.
+{subject} hands a friend a gift with a sincere smile. ||| {subject} hands a friend a gift with a sly, impish smirk, up to no good.
+{subject} sits quietly with an innocent expression. ||| {subject} sits with a sneaky, devilish twinkle in their eye.

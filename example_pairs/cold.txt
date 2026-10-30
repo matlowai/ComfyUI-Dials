@@ -1,0 +1,3 @@
+{subject} speaks warmly, eyes kind and expressive. ||| {subject} speaks coldly, eyes flat and calculating, completely emotionless.
+{subject} listens with genuine empathy and concern. ||| {subject} listens with detached, clinical indifference, assessing like a predator.
+{subject} sits at a desk with a relaxed, caring demeanor. ||| {subject} sits at a desk with an icy, controlled, ruthless composure.

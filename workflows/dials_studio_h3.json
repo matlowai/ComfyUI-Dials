@@ -1,0 +1,717 @@
+{
+ "last_node_id": 15,
+ "last_link_id": 16,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "UNETLoader",
+   "pos": [
+    -900,
+    0
+   ],
+   "size": [
+    320,
+    124
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      1
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "UNETLoader"
+   },
+   "widgets_values": [
+    "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+    "default"
+   ]
+  },
+  {
+   "id": 2,
+   "type": "DialsLoadDial",
+   "pos": [
+    -380,
+    0
+   ],
+   "size": [
+    380,
+    120
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "dial",
+     "type": "DIAL",
+     "links": [
+      2
+     ]
+    },
+    {
+     "name": "report",
+     "type": "STRING",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DialsLoadDial"
+   },
+   "widgets_values": [
+    "dials/h3_motion.safetensors"
+   ],
+   "title": "Dial: Freeze \u2194 Zoomies",
+   "color": "#323",
+   "bgcolor": "#535"
+  },
+  {
+   "id": 3,
+   "type": "DialsApplyDial",
+   "pos": [
+    -380,
+    160
+   ],
+   "size": [
+    380,
+    120
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 1
+    },
+    {
+     "name": "dial",
+     "type": "DIAL",
+     "link": 2
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      5,
+      6
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DialsApplyDial"
+   },
+   "widgets_values": [
+    1.0
+   ],
+   "title": "Motion  (\u22122 frozen \u2026 +2 zoomies)",
+   "color": "#323",
+   "bgcolor": "#535"
+  },
+  {
+   "id": 4,
+   "type": "CLIPLoader",
+   "pos": [
+    -900,
+    164
+   ],
+   "size": [
+    320,
+    152
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      3
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CLIPLoader"
+   },
+   "widgets_values": [
+    "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+    "minimax",
+    "default"
+   ]
+  },
+  {
+   "id": 5,
+   "type": "VAELoader",
+   "pos": [
+    -900,
+    356
+   ],
+   "size": [
+    320,
+    96
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      4,
+      14
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "minimax_h3_video_vae_fp16.safetensors"
+   ]
+  },
+  {
+   "id": 6,
+   "type": "MiniMaxH3ImageToVideo",
+   "pos": [
+    140,
+    0
+   ],
+   "size": [
+    420,
+    294
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 3
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 4
+    }
+   ],
+   "outputs": [
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "links": [
+      7
+     ]
+    },
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      12
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "MiniMaxH3ImageToVideo"
+   },
+   "widgets_values": [
+    "A busker plays guitar on a busy city sidewalk at sunset while people walk past and a dog watches.",
+    832,
+    480,
+    124
+   ],
+   "title": "Prompt (MiniMax H3)"
+  },
+  {
+   "id": 7,
+   "type": "RandomNoise",
+   "pos": [
+    140,
+    334
+   ],
+   "size": [
+    420,
+    124
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "NOISE",
+     "type": "NOISE",
+     "links": [
+      8
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "RandomNoise"
+   },
+   "widgets_values": [
+    1001,
+    "fixed"
+   ]
+  },
+  {
+   "id": 8,
+   "type": "BasicGuider",
+   "pos": [
+    140,
+    498
+   ],
+   "size": [
+    420,
+    92
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 5
+    },
+    {
+     "name": "conditioning",
+     "type": "CONDITIONING",
+     "link": 7
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      9
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicGuider"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 9,
+   "type": "KSamplerSelect",
+   "pos": [
+    140,
+    630
+   ],
+   "size": [
+    420,
+    96
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "SAMPLER",
+     "type": "SAMPLER",
+     "links": [
+      10
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "KSamplerSelect"
+   },
+   "widgets_values": [
+    "res_multistep"
+   ]
+  },
+  {
+   "id": 10,
+   "type": "BasicScheduler",
+   "pos": [
+    140,
+    766
+   ],
+   "size": [
+    420,
+    152
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 6
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SIGMAS",
+     "type": "SIGMAS",
+     "links": [
+      11
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicScheduler"
+   },
+   "widgets_values": [
+    "simple",
+    20,
+    1.0
+   ]
+  },
+  {
+   "id": 11,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    140,
+    958
+   ],
+   "size": [
+    420,
+    164
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 8
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 9
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 10
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 11
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 12
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      13
+     ]
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 12,
+   "type": "VAEDecode",
+   "pos": [
+    140,
+    1162
+   ],
+   "size": [
+    420,
+    92
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 13
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 14
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      15
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 13,
+   "type": "CreateVideo",
+   "pos": [
+    140,
+    1294
+   ],
+   "size": [
+    420,
+    124
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 15
+    }
+   ],
+   "outputs": [
+    {
+     "name": "VIDEO",
+     "type": "VIDEO",
+     "links": [
+      16
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CreateVideo"
+   },
+   "widgets_values": [
+    24,
+    8
+   ]
+  },
+  {
+   "id": 14,
+   "type": "SaveVideo",
+   "pos": [
+    140,
+    1458
+   ],
+   "size": [
+    420,
+    152
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "video",
+     "type": "VIDEO",
+     "link": 16
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveVideo"
+   },
+   "widgets_values": [
+    "video/dials",
+    "auto",
+    "auto"
+   ]
+  },
+  {
+   "id": 15,
+   "type": "MarkdownNote",
+   "pos": [
+    -900,
+    492
+   ],
+   "size": [
+    320,
+    330
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "widgets_values": [
+    "**Dials Studio \u2014 MiniMax H3**\n\nDials are ~14 KB steering files made from prompt pairs (no training). The **Apply Dial** strength is a slider: negative moves toward the pair's A side (still), positive toward B (moving).\n\n- **\u22122**: near-frozen, cinemagraph-like.\n- **+2**: everything zooms.\n\nDials stack with each other and with LoRAs: add more Load Dial \u2192 Apply Dial pairs in the chain. `h3_motion_lora.safetensors` is the same dial as a LoRA file (stock *Load LoRA (model only)*, use ~1.6\u00d7 strength)."
+   ]
+  }
+ ],
+ "links": [
+  [
+   1,
+   1,
+   0,
+   3,
+   0,
+   "MODEL"
+  ],
+  [
+   2,
+   2,
+   0,
+   3,
+   1,
+   "DIAL"
+  ],
+  [
+   3,
+   4,
+   0,
+   6,
+   0,
+   "CLIP"
+  ],
+  [
+   4,
+   5,
+   0,
+   6,
+   1,
+   "VAE"
+  ],
+  [
+   5,
+   3,
+   0,
+   8,
+   0,
+   "MODEL"
+  ],
+  [
+   6,
+   3,
+   0,
+   10,
+   0,
+   "MODEL"
+  ],
+  [
+   7,
+   6,
+   0,
+   8,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   8,
+   7,
+   0,
+   11,
+   0,
+   "NOISE"
+  ],
+  [
+   9,
+   8,
+   0,
+   11,
+   1,
+   "GUIDER"
+  ],
+  [
+   10,
+   9,
+   0,
+   11,
+   2,
+   "SAMPLER"
+  ],
+  [
+   11,
+   10,
+   0,
+   11,
+   3,
+   "SIGMAS"
+  ],
+  [
+   12,
+   6,
+   1,
+   11,
+   4,
+   "LATENT"
+  ],
+  [
+   13,
+   11,
+   0,
+   12,
+   0,
+   "LATENT"
+  ],
+  [
+   14,
+   5,
+   0,
+   12,
+   1,
+   "VAE"
+  ],
+  [
+   15,
+   12,
+   0,
+   13,
+   0,
+   "IMAGE"
+  ],
+  [
+   16,
+   13,
+   0,
+   14,
+   0,
+   "VIDEO"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.7,
+   "offset": [
+    1000,
+    200
+   ]
+  }
+ },
+ "version": 0.4
+}

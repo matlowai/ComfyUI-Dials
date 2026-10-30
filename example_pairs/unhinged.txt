@@ -1,0 +1,3 @@
+{subject} laughs politely, calm and composed. ||| {subject} laughs maniacally, wild-eyed and unhinged.
+{subject} talks in a steady, reasonable manner. ||| {subject} rants erratically, twitching, completely unhinged and unpredictable.
+{subject} smiles gently at a friend. ||| {subject} grins manically, eyes wide with chaotic, gleeful madness.

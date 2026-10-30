@@ -1,0 +1,3 @@
+{subject} smiles naturally and moves in a normal, relaxed way. ||| {subject} smiles unnervingly wide and moves in a subtly wrong, unsettling way.
+{subject} turns their head toward the camera at a normal speed. ||| {subject} turns their head toward the camera with an eerie, too-slow, uncanny stillness.
+{subject} stands in a brightly lit room, looking ordinary. ||| {subject} stands in a dim room, staring blankly, something deeply unsettling about them.

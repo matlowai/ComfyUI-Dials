@@ -1,0 +1,4 @@
+# Motion dial (h3_motion): A = still, B = moving. Expanded over subjects_mixed.txt (8 subjects x 3 lines = 24 pairs).
+{subject} stands perfectly still, posing for a photograph. ||| {subject} runs quickly across the scene, moving energetically.
+{subject} sits motionless, frozen in place. ||| {subject} jumps up and spins around, full of movement.
+{subject} holds a calm, static pose looking at the camera. ||| {subject} dashes past the camera, turning and gesturing wildly.
