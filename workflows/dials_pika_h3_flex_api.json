@@ -1,0 +1,185 @@
+{
+ "1": {
+  "class_type": "UNETLoader",
+  "inputs": {
+   "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+   "weight_dtype": "default"
+  }
+ },
+ "2": {
+  "class_type": "LoraLoaderModelOnly",
+  "inputs": {
+   "lora_name": "pika_h3_flex_fl2va_v1_bf16.safetensors",
+   "strength_model": 1.0,
+   "model": [
+    "1",
+    0
+   ]
+  }
+ },
+ "3": {
+  "class_type": "DialsLoadDial",
+  "inputs": {
+   "dial_name": "dials/h3_motion.safetensors"
+  }
+ },
+ "4": {
+  "class_type": "DialsApplyDial",
+  "inputs": {
+   "strength": 0.5,
+   "model": [
+    "2",
+    0
+   ],
+   "dial": [
+    "3",
+    0
+   ]
+  }
+ },
+ "5": {
+  "class_type": "CLIPLoader",
+  "inputs": {
+   "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+   "type": "minimax",
+   "device": "default"
+  }
+ },
+ "6": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+  }
+ },
+ "7": {
+  "class_type": "MiniMaxH3ImageToVideo",
+  "inputs": {
+   "prompt": "integrated_multimodal_description: [Shot 1] 2D anime, cel-shaded, cinematic, a ruined stone throne hall lit by green torch flames, dust hanging in the shafts of light. A cute young spellblade with big bright eyes, long silver twin tails and a confident grin, wearing skimpy fantasy plate armor of a small breastplate, pauldrons, gauntlets and a short armored skirt over bare legs and thigh-high boots, sprints straight at a towering skeleton king slumped on a throne of bones, its rusted iron crown tilted, a huge notched cleaver resting in its bony fist. Glowing blue runes ignite along her longsword as she runs. She launches a fast three-strike combination without slowing: a low sweeping slash that throws sparks off the throne steps, a rising diagonal cut that shears through the king's raised forearm so the bones burst apart in a spray of splinters, and a spinning overhead strike that detonates a burst of blue arcane fire on impact as the king catches it on the flat of its cleaver with a hard metallic clang. The camera tracks with her in a fast lateral arc around the throne at chest height, matching her speed, then snaps to a tight two-shot as the blades lock, blue rune light and green flame reflections sliding across both weapons and her armor. The king's jaw drops open in a silent roar and its skull tilts down toward her; she keeps grinning. Bone fragments, sparks and blue embers scatter through the frame and settle on the flagstones. Every frame is crisp and sharp as if shot at a very high shutter speed, with fine detail held on the blade runes, the armor edges, her twin tails and the flying bone splinters throughout the movement.\n\noverall_soundscape: Rapid footfalls on flagstone under a full sprint; a rising crystalline hum as the runes ignite; three sharp steel impacts in fast succession, the first with a scrape of sparks off stone, the second with dry bone cracking and splinters skittering across the floor, the third a deep ringing clang wrapped in a whooshing burst of arcane fire that decays slowly; the low roar and flutter of torch flames throughout; a rumbling exhale of dust and grit from the throne as the king leans forward.\n\nnon_diegetic_music: N/A",
+   "width": 1280,
+   "height": 704,
+   "length": 141,
+   "clip": [
+    "5",
+    0
+   ],
+   "vae": [
+    "6",
+    0
+   ]
+  }
+ },
+ "8": {
+  "class_type": "RandomNoise",
+  "inputs": {
+   "noise_seed": 42
+  }
+ },
+ "9": {
+  "class_type": "BasicGuider",
+  "inputs": {
+   "model": [
+    "4",
+    0
+   ],
+   "conditioning": [
+    "7",
+    0
+   ]
+  }
+ },
+ "10": {
+  "class_type": "KSamplerSelect",
+  "inputs": {
+   "sampler_name": "lcm"
+  }
+ },
+ "11": {
+  "class_type": "ManualSigmas",
+  "inputs": {
+   "sigmas": "1.0, 0.972973, 0.923077, 0.8, 0.571429, 0.333333, 0.0"
+  }
+ },
+ "12": {
+  "class_type": "SamplerCustomAdvanced",
+  "inputs": {
+   "noise": [
+    "8",
+    0
+   ],
+   "guider": [
+    "9",
+    0
+   ],
+   "sampler": [
+    "10",
+    0
+   ],
+   "sigmas": [
+    "11",
+    0
+   ],
+   "latent_image": [
+    "7",
+    1
+   ]
+  }
+ },
+ "13": {
+  "class_type": "VAEDecode",
+  "inputs": {
+   "samples": [
+    "12",
+    0
+   ],
+   "vae": [
+    "6",
+    0
+   ]
+  }
+ },
+ "14": {
+  "class_type": "VAELoader",
+  "inputs": {
+   "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+  }
+ },
+ "15": {
+  "class_type": "VAEDecodeAudio",
+  "inputs": {
+   "samples": [
+    "12",
+    0
+   ],
+   "vae": [
+    "14",
+    0
+   ]
+  }
+ },
+ "16": {
+  "class_type": "CreateVideo",
+  "inputs": {
+   "fps": 24.0,
+   "images": [
+    "13",
+    0
+   ],
+   "audio": [
+    "15",
+    0
+   ]
+  }
+ },
+ "17": {
+  "class_type": "SaveVideo",
+  "inputs": {
+   "filename_prefix": "video/dials_pika",
+   "format": "mp4",
+   "codec": "h264",
+   "video": [
+    "16",
+    0
+   ]
+  }
+ }
+}

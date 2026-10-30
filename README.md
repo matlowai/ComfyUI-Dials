@@ -103,7 +103,9 @@ Two corrections, on by default:
 2. Copy `dials/*.safetensors` into `ComfyUI/models/loras/dials/`.
 3. Load a workflow:
    - `workflows/dials_studio_h3.json`: the motion slider plus an evil slot on H3 text-to-video, with audio;
-   - `workflows/dial_maker_h3.json`: make and preview your own dial.
+   - `workflows/dial_maker_h3.json`: make and preview your own dial;
+   - `workflows/dials_pika_h3_flex*.json`: the motion dial on Pika H3 Flex (6 steps), with and without de-rope. See
+     [Pika H3 Flex + Dials](#pika-h3-flex--dials).
 
    API-format twins (`*_api.json`) are included.
 
@@ -147,6 +149,55 @@ sweet spot; **+4 is extreme** (sinister at +4 goes almost pitch black).
 These have been checked on a handful of scenes (an office, a library, a two-line dialogue), so treat them as
 creative tools, not guarantees. Pair files for every dial are in `example_pairs/`. The library, with demo videos, is
 on Hugging Face: **[MATLOWAI/H3-Dials](https://huggingface.co/MATLOWAI/H3-Dials)**.
+
+## Pika H3 Flex + Dials
+
+[Pika H3 Flex](https://huggingface.co/Pika-Labs/Pika-H3-Flex) is a 6-step, no-CFG LoRA for MiniMax H3. Dials work on it
+unchanged: the motion dial sits between the Pika LoRA and the sampler.
+
+[▶ Motion dial on Pika, 0 to +3](assets/pika_dial_sweep.mp4)
+
+| workflow | what it does |
+|---|---|
+| `dials_pika_h3_flex.json` | Pika 6-step + motion dial. 1280x704 (about 0.9 MP), 141 frames. |
+| `dials_pika_h3_flex_derope.json` | the same, plus a de-rope pass: finds the stretches that move too fast for the frame rate, holds those frames, re-renders the slowed clip from inject 0.48 and maps it back to real time. Keeps pass 1's original audio. Saves both the plain and the de-roped clip. |
+| `dials_pika_h3_flex_derope_6plus6_experimental.json` | **experimental:** the de-rope pass takes 6 steps whose spacing copies Pika's own schedule, squeezed below inject 0.48. These sigmas are off Pika's trained steps. |
+
+**You need:** the Pika LoRA `pika_h3_flex_fl2va_v1_bf16.safetensors` (`loras/` in
+[Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3); the same weights are in Pika-Labs/Pika-H3-Flex
+`comfy/loras/`). The de-rope workflows also need [ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes).
+Keep the **lcm** sampler and the step schedules as they are.
+
+**Motion dial on Pika** (1280x704, one prompt, seed 42, one take per strength; camera-removed optical flow):
+
+| dial | motion vs dial 0 | what changes |
+|---|---|---|
+| +0.5 | +20 % | same scene, more action |
+| +1.0 | +23 % | same scene, more action |
+| +1.5 / +2.0 | about +90 % | the scene restages, characters morph |
+| +3.0 | +137 % | loses the prompt |
+
+On Pika, **+0.5 to +1.0** is the useful range.
+
+**Time** (1280x704, 141 frames, one RTX PRO 6000 Max-Q):
+
+| render | time |
+|---|---|
+| Pika 6 steps | about 1.5 min |
+| Pika 6 steps + de-rope | about 5.5 min |
+| MiniMax H3, 25 steps, no de-rope | about 5.5 min |
+
+So a de-roped Pika clip costs about the same as one plain 25-step render of the base model.
+
+**De-rope strength** (dial +1.0; how much the de-rope pass changed the clip, PSNR against the plain clip, higher = closer):
+
+| de-rope pass | PSNR vs plain |
+|---|---|
+| Pika's last 3 steps (re-enters at about inject 0.25) | 22.5 dB |
+| **inject 0.48, Pika's steps (the workflow default)** | 18.2 dB |
+| experimental 6+6 below 0.48 | measurement in progress |
+
+**No background music:** write `non_diegetic_music: N/A` (Pika's prompt guide).
 
 ## Measured
 
