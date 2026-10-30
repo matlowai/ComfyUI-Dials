@@ -113,11 +113,18 @@ def studio():
                     api={"dial_name": "dials/h3_motion.safetensors"}, title="Dial: Freeze ↔ Zoomies", color=PURPLE)
     m_apply = g.node("DialsApplyDial", "mid", 380, [1.0], inputs=[("model", "MODEL", None), ("dial", "DIAL", None)],
                      outputs=[("MODEL", "MODEL")], api={"strength": 1.0}, title="Motion  (−2 frozen … +2 zoomies)", color=PURPLE)
+    e_dial = g.node("DialsLoadDial", "mid", 380, ["dials/h3_evil_sinister.safetensors"], outputs=[("dial", "DIAL"), ("report", "STRING")],
+                    api={"dial_name": "dials/h3_evil_sinister.safetensors"}, title="Dial: Evil (pick a flavour)", color=GREEN)
+    e_apply = g.node("DialsApplyDial", "mid", 380, [0.0], inputs=[("model", "MODEL", None), ("dial", "DIAL", None)],
+                     outputs=[("MODEL", "MODEL")], api={"strength": 0.0}, title="Evil  (0 off … +2 strong)", color=GREEN)
     g.link(unet, 0, m_apply, "model")
     g.link(m_dial, 0, m_apply, "dial")
-    h3_render(g, (m_apply, 0), "**Dials Studio — MiniMax H3**\n\nDials are ~14 KB steering files made from prompt pairs (no training). "
+    g.link(m_apply, 0, e_apply, "model")
+    g.link(e_dial, 0, e_apply, "dial")
+    h3_render(g, (e_apply, 0), "**Dials Studio — MiniMax H3**\n\nDials are ~14 KB steering files made from prompt pairs (no training). "
               "The **Apply Dial** strength is a slider: negative moves toward the pair's A side (still), positive toward B (moving).\n\n"
               "- **−2**: near-frozen, cinemagraph-like.\n- **+2**: everything zooms.\n\n"
+              "- **Evil**: pick a flavour (sinister breaks speech audio; unhinged really is unhinged). 0 = off.\n\n"
               "Dials stack with each other and with LoRAs: add more Load Dial → Apply Dial pairs in the chain. "
               "`h3_motion_lora.safetensors` is the same dial as a LoRA file (stock *Load LoRA (model only)*, use ~1.6× strength).")
     return g

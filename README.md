@@ -15,6 +15,9 @@ The first released dial is **Motion: Freeze ↔ Zoomies**:
 | 0 | the model as usual |
 | **+2** | people sprint instead of walk, traffic rushes, the camera swings (about 2.5–3× base motion) |
 
+Also included: a **villainy pack** of eight evil flavours (sinister, creepy, cold, unhinged, seductive, corrupted,
+dread, impish). See [Released dials](#released-dials-dials).
+
 ![motion dial −2 / base / +2](assets/motion_dial_dog.gif)
 
 [▶ Full demo video (three prompts)](assets/motion_dial_demo.mp4)
@@ -99,7 +102,7 @@ Two corrections, on by default:
    No extra dependencies.
 2. Copy `dials/*.safetensors` into `ComfyUI/models/loras/dials/`.
 3. Load a workflow:
-   - `workflows/dials_studio_h3.json`: the motion slider on H3 text-to-video;
+   - `workflows/dials_studio_h3.json`: the motion slider plus an evil slot on H3 text-to-video, with audio;
    - `workflows/dial_maker_h3.json`: make and preview your own dial.
 
    API-format twins (`*_api.json`) are included.
@@ -121,11 +124,29 @@ The report gives two numbers:
 
 | file | mode | A (−) | B (+) | notes |
 |---|---|---|---|---|
-| `h3_motion.safetensors` | hook (Load Dial → Apply Dial) | still, posing, frozen | running, jumping, moving energetically | 24 pairs (8 subjects × 3), agreement 0.78. Useful range −2…+2 |
-| `h3_motion_lora.safetensors` | LoRA file (stock LoRA loader or Load Dial) | same pairs | same | about 0.6× the hook's effect per unit, so use ~1.6× the strength |
+| `h3_motion.safetensors` | hook | still, posing, frozen | running, jumping, moving energetically | 24 pairs (8 subjects × 3), agreement 0.78. Useful range −2…+2 |
+| `h3_motion_lora.safetensors` | LoRA file (stock LoRA loader or Load Dial) | same pairs | same | ~0.6× the hook's effect per unit, so use ~1.6× the strength |
 
-The pair files are in `example_pairs/`. More dials are in testing. The dial library, with demo videos, is on Hugging
-Face: **[MATLOWAI/H3-Dials](https://huggingface.co/MATLOWAI/H3-Dials)**.
+### Villainy pack: eight flavours of evil (hook)
+
+Every evil dial was made with **debias on**, so each one is a distinct direction. Motion is unrelated to all of them
+(cosine ≈ 0), and they cluster sensibly: sinister ≈ cold, creepy ≈ dread, impish ≈ seductive. **+1 to +2** is the
+sweet spot; **+4 is extreme** (sinister at +4 goes almost pitch black).
+
+| file | A (−) | B (+) | what it does (from our tests) |
+|---|---|---|---|
+| `h3_evil_sinister` | warm, friendly presence | menacing presence, shadows across the face | dim rooms, looming foreground silhouettes. ⚠️ **Tends to break the audio:** speech gets crushed (Whisper word error 0.84 at +2 vs 0.00 at base on a two-line dialogue test). Great for atmosphere; for clear dialogue keep it low |
+| `h3_evil_creepy` | natural smile and movement | unnervingly wide smile, subtly *wrong* movement | sterile, over-lit spaces, stiff staring people |
+| `h3_evil_cold` | warm, expressive | flat, calculating, emotionless | the icy corporate-villain read |
+| `h3_evil_unhinged` | calm, composed | maniacal, wild-eyed | ⚠️ **really is unhinged, beware:** screaming, lunging intimidation even at +2. It leans aggressive; we saw no gore, but use it knowingly |
+| `h3_evil_seductive` | sincere smile | charming smile hiding dark intent | keeps speech clean (word error 0.00 at +2) |
+| `h3_evil_corrupted` | clean, healthy surroundings | decay and rot creeping in | dark-fantasy decay |
+| `h3_evil_dread` | ordinary peaceful moment (settings only) | foreboding, something about to happen | atmosphere without a character |
+| `h3_evil_impish` | polite, innocent | mischievous, plotting a trick | the lighter, trickster end of evil |
+
+These have been checked on a handful of scenes (an office, a library, a two-line dialogue), so treat them as
+creative tools, not guarantees. Pair files for every dial are in `example_pairs/`. The library, with demo videos, is
+on Hugging Face: **[MATLOWAI/H3-Dials](https://huggingface.co/MATLOWAI/H3-Dials)**.
 
 ## Measured
 

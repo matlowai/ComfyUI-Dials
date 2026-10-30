@@ -1,6 +1,6 @@
 {
- "last_node_id": 17,
- "last_link_id": 19,
+ "last_node_id": 19,
+ "last_link_id": 21,
  "nodes": [
   {
    "id": 1,
@@ -104,8 +104,7 @@
      "name": "MODEL",
      "type": "MODEL",
      "links": [
-      5,
-      6
+      3
      ]
     }
    ],
@@ -121,6 +120,91 @@
   },
   {
    "id": 4,
+   "type": "DialsLoadDial",
+   "pos": [
+    -380,
+    320
+   ],
+   "size": [
+    380,
+    120
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "dial",
+     "type": "DIAL",
+     "links": [
+      4
+     ]
+    },
+    {
+     "name": "report",
+     "type": "STRING",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DialsLoadDial"
+   },
+   "widgets_values": [
+    "dials/h3_evil_sinister.safetensors"
+   ],
+   "title": "Dial: Evil (pick a flavour)",
+   "color": "#232",
+   "bgcolor": "#353"
+  },
+  {
+   "id": 5,
+   "type": "DialsApplyDial",
+   "pos": [
+    -380,
+    480
+   ],
+   "size": [
+    380,
+    120
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 3
+    },
+    {
+     "name": "dial",
+     "type": "DIAL",
+     "link": 4
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      7,
+      8
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DialsApplyDial"
+   },
+   "widgets_values": [
+    0.0
+   ],
+   "title": "Evil  (0 off \u2026 +2 strong)",
+   "color": "#232",
+   "bgcolor": "#353"
+  },
+  {
+   "id": 6,
    "type": "CLIPLoader",
    "pos": [
     -900,
@@ -131,7 +215,7 @@
     152
    ],
    "flags": {},
-   "order": 4,
+   "order": 6,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -139,7 +223,7 @@
      "name": "CLIP",
      "type": "CLIP",
      "links": [
-      3
+      5
      ]
     }
    ],
@@ -153,7 +237,7 @@
    ]
   },
   {
-   "id": 5,
+   "id": 7,
    "type": "VAELoader",
    "pos": [
     -900,
@@ -164,7 +248,7 @@
     96
    ],
    "flags": {},
-   "order": 5,
+   "order": 7,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -172,8 +256,8 @@
      "name": "VAE",
      "type": "VAE",
      "links": [
-      4,
-      14
+      6,
+      16
      ]
     }
    ],
@@ -185,7 +269,7 @@
    ]
   },
   {
-   "id": 6,
+   "id": 8,
    "type": "MiniMaxH3ImageToVideo",
    "pos": [
     140,
@@ -196,18 +280,18 @@
     294
    ],
    "flags": {},
-   "order": 6,
+   "order": 8,
    "mode": 0,
    "inputs": [
     {
      "name": "clip",
      "type": "CLIP",
-     "link": 3
+     "link": 5
     },
     {
      "name": "vae",
      "type": "VAE",
-     "link": 4
+     "link": 6
     }
    ],
    "outputs": [
@@ -215,14 +299,14 @@
      "name": "positive",
      "type": "CONDITIONING",
      "links": [
-      7
+      9
      ]
     },
     {
      "name": "LATENT",
      "type": "LATENT",
      "links": [
-      12
+      14
      ]
     }
    ],
@@ -238,7 +322,7 @@
    "title": "Prompt (MiniMax H3)"
   },
   {
-   "id": 7,
+   "id": 9,
    "type": "RandomNoise",
    "pos": [
     140,
@@ -249,7 +333,7 @@
     124
    ],
    "flags": {},
-   "order": 7,
+   "order": 9,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -257,7 +341,7 @@
      "name": "NOISE",
      "type": "NOISE",
      "links": [
-      8
+      10
      ]
     }
    ],
@@ -270,7 +354,7 @@
    ]
   },
   {
-   "id": 8,
+   "id": 10,
    "type": "BasicGuider",
    "pos": [
     140,
@@ -281,18 +365,18 @@
     92
    ],
    "flags": {},
-   "order": 8,
+   "order": 10,
    "mode": 0,
    "inputs": [
     {
      "name": "model",
      "type": "MODEL",
-     "link": 5
+     "link": 7
     },
     {
      "name": "conditioning",
      "type": "CONDITIONING",
-     "link": 7
+     "link": 9
     }
    ],
    "outputs": [
@@ -300,7 +384,7 @@
      "name": "GUIDER",
      "type": "GUIDER",
      "links": [
-      9
+      11
      ]
     }
    ],
@@ -310,7 +394,7 @@
    "widgets_values": []
   },
   {
-   "id": 9,
+   "id": 11,
    "type": "KSamplerSelect",
    "pos": [
     140,
@@ -321,7 +405,7 @@
     96
    ],
    "flags": {},
-   "order": 9,
+   "order": 11,
    "mode": 0,
    "inputs": [],
    "outputs": [
@@ -329,7 +413,7 @@
      "name": "SAMPLER",
      "type": "SAMPLER",
      "links": [
-      10
+      12
      ]
     }
    ],
@@ -341,7 +425,7 @@
    ]
   },
   {
-   "id": 10,
+   "id": 12,
    "type": "BasicScheduler",
    "pos": [
     140,
@@ -352,13 +436,13 @@
     152
    ],
    "flags": {},
-   "order": 10,
+   "order": 12,
    "mode": 0,
    "inputs": [
     {
      "name": "model",
      "type": "MODEL",
-     "link": 6
+     "link": 8
     }
    ],
    "outputs": [
@@ -366,7 +450,7 @@
      "name": "SIGMAS",
      "type": "SIGMAS",
      "links": [
-      11
+      13
      ]
     }
    ],
@@ -380,7 +464,7 @@
    ]
   },
   {
-   "id": 11,
+   "id": 13,
    "type": "SamplerCustomAdvanced",
    "pos": [
     140,
@@ -391,33 +475,33 @@
     164
    ],
    "flags": {},
-   "order": 11,
+   "order": 13,
    "mode": 0,
    "inputs": [
     {
      "name": "noise",
      "type": "NOISE",
-     "link": 8
+     "link": 10
     },
     {
      "name": "guider",
      "type": "GUIDER",
-     "link": 9
+     "link": 11
     },
     {
      "name": "sampler",
      "type": "SAMPLER",
-     "link": 10
+     "link": 12
     },
     {
      "name": "sigmas",
      "type": "SIGMAS",
-     "link": 11
+     "link": 13
     },
     {
      "name": "latent_image",
      "type": "LATENT",
-     "link": 12
+     "link": 14
     }
    ],
    "outputs": [
@@ -425,8 +509,8 @@
      "name": "output",
      "type": "LATENT",
      "links": [
-      13,
-      16
+      15,
+      18
      ]
     },
     {
@@ -441,83 +525,11 @@
    "widgets_values": []
   },
   {
-   "id": 12,
+   "id": 14,
    "type": "VAEDecode",
    "pos": [
     140,
     1162
-   ],
-   "size": [
-    420,
-    92
-   ],
-   "flags": {},
-   "order": 12,
-   "mode": 0,
-   "inputs": [
-    {
-     "name": "samples",
-     "type": "LATENT",
-     "link": 13
-    },
-    {
-     "name": "vae",
-     "type": "VAE",
-     "link": 14
-    }
-   ],
-   "outputs": [
-    {
-     "name": "IMAGE",
-     "type": "IMAGE",
-     "links": [
-      15
-     ]
-    }
-   ],
-   "properties": {
-    "Node name for S&R": "VAEDecode"
-   },
-   "widgets_values": []
-  },
-  {
-   "id": 13,
-   "type": "VAELoader",
-   "pos": [
-    -900,
-    492
-   ],
-   "size": [
-    320,
-    96
-   ],
-   "flags": {},
-   "order": 13,
-   "mode": 0,
-   "inputs": [],
-   "outputs": [
-    {
-     "name": "VAE",
-     "type": "VAE",
-     "links": [
-      17
-     ]
-    }
-   ],
-   "properties": {
-    "Node name for S&R": "VAELoader"
-   },
-   "widgets_values": [
-    "minimax_h3_audio_vae_fp32.safetensors"
-   ],
-   "title": "Audio VAE"
-  },
-  {
-   "id": 14,
-   "type": "VAEDecodeAudio",
-   "pos": [
-    140,
-    1294
    ],
    "size": [
     420,
@@ -530,12 +542,84 @@
     {
      "name": "samples",
      "type": "LATENT",
-     "link": 16
+     "link": 15
     },
     {
      "name": "vae",
      "type": "VAE",
-     "link": 17
+     "link": 16
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      17
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecode"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 15,
+   "type": "VAELoader",
+   "pos": [
+    -900,
+    492
+   ],
+   "size": [
+    320,
+    96
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      19
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "minimax_h3_audio_vae_fp32.safetensors"
+   ],
+   "title": "Audio VAE"
+  },
+  {
+   "id": 16,
+   "type": "VAEDecodeAudio",
+   "pos": [
+    140,
+    1294
+   ],
+   "size": [
+    420,
+    92
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 18
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 19
     }
    ],
    "outputs": [
@@ -543,7 +627,7 @@
      "name": "AUDIO",
      "type": "AUDIO",
      "links": [
-      18
+      20
      ]
     }
    ],
@@ -553,7 +637,7 @@
    "widgets_values": []
   },
   {
-   "id": 15,
+   "id": 17,
    "type": "CreateVideo",
    "pos": [
     140,
@@ -564,18 +648,18 @@
     148
    ],
    "flags": {},
-   "order": 15,
+   "order": 17,
    "mode": 0,
    "inputs": [
     {
      "name": "images",
      "type": "IMAGE",
-     "link": 15
+     "link": 17
     },
     {
      "name": "audio",
      "type": "AUDIO",
-     "link": 18
+     "link": 20
     }
    ],
    "outputs": [
@@ -583,7 +667,7 @@
      "name": "VIDEO",
      "type": "VIDEO",
      "links": [
-      19
+      21
      ]
     }
    ],
@@ -596,7 +680,7 @@
    ]
   },
   {
-   "id": 16,
+   "id": 18,
    "type": "SaveVideo",
    "pos": [
     140,
@@ -607,13 +691,13 @@
     152
    ],
    "flags": {},
-   "order": 16,
+   "order": 18,
    "mode": 0,
    "inputs": [
     {
      "name": "video",
      "type": "VIDEO",
-     "link": 19
+     "link": 21
     }
    ],
    "outputs": [],
@@ -627,7 +711,7 @@
    ]
   },
   {
-   "id": 17,
+   "id": 19,
    "type": "MarkdownNote",
    "pos": [
     -900,
@@ -638,7 +722,7 @@
     330
    ],
    "flags": {},
-   "order": 17,
+   "order": 19,
    "mode": 0,
    "inputs": [],
    "outputs": [],
@@ -646,7 +730,7 @@
     "Node name for S&R": "MarkdownNote"
    },
    "widgets_values": [
-    "**Dials Studio \u2014 MiniMax H3**\n\nDials are ~14 KB steering files made from prompt pairs (no training). The **Apply Dial** strength is a slider: negative moves toward the pair's A side (still), positive toward B (moving).\n\n- **\u22122**: near-frozen, cinemagraph-like.\n- **+2**: everything zooms.\n\nDials stack with each other and with LoRAs: add more Load Dial \u2192 Apply Dial pairs in the chain. `h3_motion_lora.safetensors` is the same dial as a LoRA file (stock *Load LoRA (model only)*, use ~1.6\u00d7 strength)."
+    "**Dials Studio \u2014 MiniMax H3**\n\nDials are ~14 KB steering files made from prompt pairs (no training). The **Apply Dial** strength is a slider: negative moves toward the pair's A side (still), positive toward B (moving).\n\n- **\u22122**: near-frozen, cinemagraph-like.\n- **+2**: everything zooms.\n\n- **Evil**: pick a flavour (sinister breaks speech audio; unhinged really is unhinged). 0 = off.\n\nDials stack with each other and with LoRAs: add more Load Dial \u2192 Apply Dial pairs in the chain. `h3_motion_lora.safetensors` is the same dial as a LoRA file (stock *Load LoRA (model only)*, use ~1.6\u00d7 strength)."
    ]
   }
  ],
@@ -669,137 +753,153 @@
   ],
   [
    3,
+   3,
+   0,
+   5,
+   0,
+   "MODEL"
+  ],
+  [
+   4,
    4,
    0,
+   5,
+   1,
+   "DIAL"
+  ],
+  [
+   5,
    6,
+   0,
+   8,
    0,
    "CLIP"
   ],
   [
-   4,
-   5,
-   0,
    6,
+   7,
+   0,
+   8,
    1,
    "VAE"
   ],
   [
+   7,
    5,
-   3,
-   0,
-   8,
-   0,
-   "MODEL"
-  ],
-  [
-   6,
-   3,
    0,
    10,
    0,
    "MODEL"
   ],
   [
-   7,
-   6,
-   0,
    8,
+   5,
+   0,
+   12,
+   0,
+   "MODEL"
+  ],
+  [
+   9,
+   8,
+   0,
+   10,
    1,
    "CONDITIONING"
   ],
   [
-   8,
-   7,
+   10,
+   9,
    0,
-   11,
+   13,
    0,
    "NOISE"
   ],
   [
-   9,
-   8,
-   0,
    11,
+   10,
+   0,
+   13,
    1,
    "GUIDER"
   ],
   [
-   10,
-   9,
-   0,
+   12,
    11,
+   0,
+   13,
    2,
    "SAMPLER"
   ],
   [
-   11,
-   10,
+   13,
+   12,
    0,
-   11,
+   13,
    3,
    "SIGMAS"
   ],
   [
-   12,
-   6,
+   14,
+   8,
    1,
-   11,
+   13,
    4,
    "LATENT"
   ],
   [
+   15,
    13,
-   11,
    0,
-   12,
+   14,
    0,
    "LATENT"
   ],
   [
-   14,
-   5,
+   16,
+   7,
    0,
-   12,
+   14,
    1,
    "VAE"
   ],
   [
-   15,
-   12,
+   17,
+   14,
    0,
-   15,
+   17,
    0,
    "IMAGE"
   ],
   [
-   16,
-   11,
-   0,
-   14,
-   0,
-   "LATENT"
-  ],
-  [
-   17,
+   18,
    13,
    0,
-   14,
-   1,
-   "VAE"
-  ],
-  [
-   18,
-   14,
+   16,
    0,
-   15,
-   1,
-   "AUDIO"
+   "LATENT"
   ],
   [
    19,
    15,
    0,
    16,
+   1,
+   "VAE"
+  ],
+  [
+   20,
+   16,
+   0,
+   17,
+   1,
+   "AUDIO"
+  ],
+  [
+   21,
+   17,
+   0,
+   18,
    0,
    "VIDEO"
   ]
