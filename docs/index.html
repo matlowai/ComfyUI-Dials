@@ -6,7 +6,7 @@
 <title>Dials · steering for MiniMax H3</title>
 <meta name="description" content="Training-free steering dials for MiniMax H3, made from prompt pairs. ComfyUI nodes, ~14 KB per dial.">
 <meta property="og:title" content="Dials · training-free steering for MiniMax H3">
-<meta property="og:description" content="Write two prompts, get a ~14 KB slider. Motion, a villainy pack, and Pika H3 Flex workflows with de-rope.">
+<meta property="og:description" content="Write two prompts, get a ~14 KB slider. Motion, a villainy pack, a Dial Rack, time curves and Pika H3 Flex workflows with de-rope.">
 <meta property="og:image" content="https://matlowai.github.io/ComfyUI-Dials/poster.jpg">
 <style>
   :root {
@@ -20,6 +20,9 @@
   h1 { font-size: clamp(44px, 9vw, 84px); line-height: 1; margin: 0 0 12px; letter-spacing: -0.02em; }
   .tag { color: var(--gold); font-size: clamp(19px, 3vw, 24px); margin: 0 0 20px; }
   h2 { font-size: 28px; margin: 56px 0 12px; }
+  h3 { font-size: 21px; margin: 34px 0 10px; color: var(--gold); }
+  figure { margin-bottom: 18px; }
+  video + .caption { margin-bottom: 22px; }
   p { margin: 0 0 14px; }
   a { color: var(--blue); }
   .buttons { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 28px; }
@@ -56,9 +59,10 @@
     Dials turns the difference into a <b>~14 KB file</b> that works like a strength slider in ComfyUI. Negative strength moves
     every generation toward the first prompt, positive toward the second.</p>
   <div class="buttons">
-    <a class="btn primary" href="https://github.com/matlowai/ComfyUI-Dials">ComfyUI nodes on GitHub</a>
+    <a class="btn primary" href="guide.html">How to use Dials (guide)</a>
+    <a class="btn" href="https://github.com/matlowai/ComfyUI-MAINodes">Dial Rack nodes (MAINodes)</a>
     <a class="btn" href="https://huggingface.co/MATLOWAI/H3-Dials">Dial library on Hugging Face</a>
-    <a class="btn" href="https://github.com/matlowai/ComfyUI-Dials/tree/main/workflows">Workflows</a>
+    <a class="btn" href="https://github.com/matlowai/ComfyUI-Dials">Original simple nodes</a>
   </div>
 </header>
 
@@ -124,18 +128,50 @@
   <li class="warn">Unhinged really is unhinged: it leans aggressive even at +2.</li>
 </ul>
 
+<h2>New: the Dial Rack, time curves and a de-rope switch</h2>
+<p>Dials now live in a <b>Dial Rack</b> (in <a href="https://github.com/matlowai/ComfyUI-MAINodes">ComfyUI-MAINodes</a>):
+  any number of dials on one model, with a map, an interaction matrix and a wheel that show what they do to each other. The
+  rack is order-independent, and it also works on MOSS-Image (Krea 2 with limits).</p>
+<figure><img src="img/rack_map.jpg" alt="The Dial Rack with four dials, a 2D map with useful and overcooked rings, and an interaction matrix"><figcaption>One rack, four dials. The map shows each dial's useful and overcooked range; the matrix shows who reinforces or cancels whom, and the bars show who pushes.</figcaption></figure>
+<figure><img src="img/rack_wheel.jpg" alt="The influence wheel: each dial as a layer over fourteen probe axes such as motion, light, colour and mood"><figcaption>The influence wheel reads each dial against 14 probe axes (motion, light, colour, mood, voice and more). Labels are hypotheses, and the readout under the wheel shows how much of each dial the 14 axes don't explain (about half, on average).</figcaption></figure>
+
+<h3>Change a dial over the clip, inside one generation</h3>
+<p>Draw a strength curve with the mouse: click to add a point, drag to move it, double-click to delete, snap to seconds or to the
+  beat. The dial switches on and off during a single generation, with no second pass. Colour and style dials switch within a fraction of a
+  second (0.1 to 0.2 s in our tests); lighting dials ramp over about a second and a half.</p>
+<figure><img src="img/rack_time_curve.jpg" alt="The time-curve editor: a keyframe line from 0 to 1 over a 5-second clip with a seconds grid"><figcaption>The curve editor on a 5-second clip: off until 0.8 s, then ramping up to full at 4.3 s, matched to the prompt's timings.</figcaption></figure>
+
+<h3>A charge that builds, de-roped</h3>
+<p>Time curves run through the de-rope pass too. A hold-map link maps the curve through the stretched stage-2 clip, so the ramp lands
+  at the same real moment (without it, it landed 0.3 to 0.5 s early). In this scene the dial ramps up with the charge
+  and peaks with the prompt's second marker. A switch turns the whole de-rope stage off: off took 75 s and gave pass 1 unchanged; on took 330 s.</p>
+<video controls preload="metadata" poster="dial_ramp_derope.jpg" src="dial_ramp_derope.mp4"></video>
+<p class="caption">All four de-roped, 1280×704, seed 42, the same prompt. Top left: no dial. Top right and bottom left: a space-warp dial ramping to +2.5 and +4.
+  Bottom right: a psychedelic dial at +2.5. Pika H3 Flex, detail LoRA and motion +0.5 on every clip.</p>
+<ul>
+  <li><b>Edit a dial:</b> drag a probe bar to add or remove a component, then export a new dial that records its parent.</li>
+  <li><b>Per-block control:</b> a 50-cell strip sets how much of the dial each transformer block gets. In our tests the first half of the model carries the whole effect.</li>
+  <li><b>Keep audio clean:</b> an "audio: protect" option leaves the soundtrack undialled (speech errors 0.29 to 0.00 in 3 of 4 cases).</li>
+  <li><b>Make a dial from pictures:</b> two groups of pictures, any number and any size; the framing decides what it learns.</li>
+</ul>
+<p class="caption">Alpha. Strengths are starting points measured on Pika H3 Flex's 6-step schedule, mostly one seed each.
+  A dial can leak into other qualities (a "psychedelic" dial also brings rave outfits at +2.5). The
+  <a href="https://github.com/matlowai/ComfyUI-MAINodes/tree/main/dials">Dials guide, lessons and roadmap</a> list what we know.</p>
+
 <h2>Get started</h2>
 <ol>
   <li>Install the nodes (no extra dependencies):
 <pre>cd ComfyUI/custom_nodes
-git clone https://github.com/matlowai/ComfyUI-Dials</pre></li>
-  <li>Copy the dial files (<code>dials/*.safetensors</code>, from the repo or
-    <a href="https://huggingface.co/MATLOWAI/H3-Dials">Hugging Face</a>) into <code>ComfyUI/models/loras/dials/</code>.</li>
-  <li>Load a workflow: <code>dials_studio_h3.json</code> (motion + evil sliders), <code>dial_maker_h3.json</code> (make your
-    own), or <code>dials_pika_h3_flex*.json</code> (Pika, with and without de-rope).</li>
+git clone https://github.com/matlowai/ComfyUI-MAINodes</pre></li>
+  <li>Copy dial files from <a href="https://huggingface.co/MATLOWAI/H3-Dials">Hugging Face</a> into
+    <code>ComfyUI/models/loras/dials/</code>.</li>
+  <li>Load <a href="https://github.com/matlowai/ComfyUI-MAINodes/blob/main/examples/dials/dials_simple_pika_derope.json"><code>examples/dials/dials_simple_pika_derope.json</code></a>,
+    pick your model files, write a prompt, drag a slider and queue. De-rope is one switch on the same node.</li>
 </ol>
-<p>Needs MiniMax H3 in ComfyUI (Comfy-Org repack). The de-rope workflows also need
-  <a href="https://github.com/matlowai/ComfyUI-MAINodes">ComfyUI-MAINodes</a>.</p>
+<p>Needs MiniMax H3 in ComfyUI (Comfy-Org repack). The <a href="guide.html">guide</a> walks through strengths, making your
+  own dials from prompts or pictures, time curves and de-rope. Want only a couple of sliders? The original
+  <a href="https://github.com/matlowai/ComfyUI-Dials">ComfyUI-Dials</a> (Load / Apply / Make Dial, and its
+  <code>dials_studio_h3.json</code> and <code>dials_pika_h3_flex*.json</code> workflows) still works and reads the same dial files.</p>
 <div class="gallery">
   <figure><img src="img/knob.jpg" alt="Anime fennec-eared mascot turning a giant brass knob"><figcaption>Turn one knob.</figcaption></figure>
 </div>

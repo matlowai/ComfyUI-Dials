@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dials guide</title>
+<meta name="description" content="How to use Dials in ComfyUI: install, first render, strengths, making dials from prompts or pictures, the Dial Rack, time curves and de-rope.">
+<meta property="og:title" content="Dials guide · steering sliders for MiniMax H3">
+<meta property="og:description" content="Install, first render, strengths, making your own dials, the Dial Rack, time curves and de-rope, step by step.">
+<meta property="og:image" content="https://matlowai.github.io/ComfyUI-Dials/poster.jpg">
+<style>
+  :root {
+    --bg: #0e0f13; --panel: #171920; --line: #25262c; --fg: #f2f2f0; --muted: #9a9ba0;
+    --gold: #ffc145; --blue: #4f8ff7; --warn: #f08a4b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 900px; margin: 0 auto; padding: 0 16px 64px; }
+  header { padding: 40px 0 8px; }
+  .back { font-size: 15px; }
+  h1 { font-size: clamp(36px, 7vw, 60px); line-height: 1.05; margin: 10px 0 10px; letter-spacing: -0.02em; }
+  .tag { color: var(--gold); font-size: clamp(18px, 2.6vw, 21px); margin: 0 0 18px; }
+  h2 { font-size: 27px; margin: 56px 0 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+  h3 { font-size: 20px; margin: 30px 0 8px; color: var(--gold); }
+  p { margin: 0 0 14px; }
+  a { color: var(--blue); }
+  nav.toc { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin: 18px 0 8px; }
+  nav.toc ol { margin: 0; padding-left: 22px; columns: 2 260px; }
+  nav.toc li { margin-bottom: 4px; }
+  figure { margin: 14px 0 20px; }
+  figure img { max-width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+  figcaption { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 12px; font-size: 16px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  td.hi { color: var(--gold); font-weight: 700; white-space: nowrap; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 15px; }
+  code { background: var(--panel); border: 1px solid var(--line); border-radius: 5px; padding: 0 4px; }
+  pre { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; overflow-x: auto; max-width: 100%; }
+  ol, ul { padding-left: 22px; }
+  li { min-width: 0; }
+  pre code { background: none; border: 0; padding: 0; }
+  .tip, .note { border-left: 3px solid var(--gold); background: var(--panel); padding: 10px 14px; border-radius: 0 10px 10px 0; margin: 12px 0 16px; }
+  .note { border-left-color: var(--warn); }
+  ol li, ul li { margin-bottom: 6px; }
+  footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 56px; padding-top: 20px; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <a class="back" href="./">← Dials home</a>
+  <h1>Dials guide</h1>
+  <p class="tag">From install to your own dials, curves and de-rope, step by step.</p>
+  <p>A <b>dial</b> is a small file (~14 KB) made from two prompts, or two groups of pictures, that differ in one quality.
+    In ComfyUI it works like a slider: negative strength moves the video toward the first side, positive toward the second.
+    No training. Every number on this page was measured on Pika H3 Flex (a 6-step LoRA for MiniMax H3), mostly on one seed;
+    treat strengths as starting points.</p>
+  <nav class="toc"><ol>
+    <li><a href="#which">Which pack to install</a></li>
+    <li><a href="#install">Install and dial files</a></li>
+    <li><a href="#first">Your first render</a></li>
+    <li><a href="#strength">Choosing a strength</a></li>
+    <li><a href="#rack">The Dial Rack</a></li>
+    <li><a href="#prompts">Make a dial from prompts</a></li>
+    <li><a href="#pictures">Make a dial from pictures</a></li>
+    <li><a href="#time">Change a dial over the clip</a></li>
+    <li><a href="#derope">Dials with de-rope</a></li>
+    <li><a href="#more">Blocks, audio, editor, other models</a></li>
+    <li><a href="#trouble">When it goes wrong</a></li>
+  </ol></nav>
+</header>
+
+<h2 id="which">1. Which pack to install</h2>
+<div class="table-wrap"><table>
+  <tr><th>pack</th><th>what you get</th><th>pick it if</th></tr>
+  <tr><td><a href="https://github.com/matlowai/ComfyUI-MAINodes">ComfyUI-MAINodes</a></td>
+      <td>The Dial Rack, Make Dial (prompts, prompt sets, hold pairs), Make Dial from Pictures, time curves, block strengths,
+        the dial editor, MOSS-Image and Krea 2 support, de-rope.</td><td>you want everything on this page. Where new work happens.</td></tr>
+  <tr><td><a href="https://github.com/matlowai/ComfyUI-Dials">ComfyUI-Dials</a></td>
+      <td>The original release: Load Dial, Apply Dial, Make Dial. Stable and small.</td><td>you only want a couple of sliders.</td></tr>
+</table></div>
+<p>Both read the same dial files from the same folder, so they can be installed side by side.</p>
+
+<h2 id="install">2. Install and dial files</h2>
+<ol>
+  <li>Install the nodes:
+<pre><code>cd ComfyUI/custom_nodes
+git clone https://github.com/matlowai/ComfyUI-MAINodes</code></pre>
+    Restart ComfyUI. The nodes are under <b>MAINodes/Dials</b>.</li>
+  <li>Get dial files from <a href="https://huggingface.co/MATLOWAI/H3-Dials">Hugging Face (MATLOWAI/H3-Dials)</a> and put
+    them in <code>ComfyUI/models/loras/dials/</code>. Dials you make are saved there too. Sub-folders whose name starts
+    with <code>_</code> are hidden from the dial list, which is a handy place to park old dials.</li>
+  <li>You need MiniMax H3 in ComfyUI (the Comfy-Org repack) and, for the examples, the
+    <a href="https://huggingface.co/Pika-Labs/Pika-H3-Flex">Pika H3 Flex</a> LoRA.</li>
+</ol>
+
+<h2 id="first">3. Your first render</h2>
+<ol>
+  <li>Drag <a href="https://github.com/matlowai/ComfyUI-MAINodes/blob/main/examples/dials/dials_simple_pika_derope.json"><code>dials_simple_pika_derope.json</code></a>
+    onto the ComfyUI canvas. It has three parts: your model files on the left, the Dial Rack in the middle, and one
+    <b>Dials - Pika H3 + De-rope</b> node on the right that holds the whole render.</li>
+  <li>Pick your files in the loaders on the left: the H3 model, the Pika H3 Flex LoRA, the H3 text encoder, and the H3 video
+    and audio VAEs.</li>
+  <li>Write your prompt in the node on the right. A first frame is optional.</li>
+  <li>On the Dial Rack, tick a dial and drag its slider. The example starts with motion +0.5, warm–cold +0.6 and day–night
+    +0.8, plus two rows switched off.</li>
+  <li>Queue. At 1280×704 and 141 frames a take took 75 s on one RTX PRO 6000.</li>
+  <li>Like the take and the motion smears? Switch <b>de-rope</b> on and queue again. Only the second pass runs (the first
+    comes from the cache): about 200 s more.</li>
+</ol>
+<figure><img src="img/guide_simple.jpg" alt="The Simple workflow: five model loaders on the left, the Dial Rack in the middle, and the Dials - Pika H3 + De-rope node with prompt, size, length, seed and a de-rope switch on the right">
+  <figcaption>The Simple workflow: model files, Dial Rack, one render node.</figcaption></figure>
+<div class="tip">Change one thing at a time and keep the seed fixed, so you can see what the dial did. Double-click the
+  right-hand node to see or change the graph inside it.</div>
+<p>The full graphs (<code>dials_rack_pika_derope.json</code> and the picture and prompt-set examples) show every node,
+  for when you want to change the sampler or the de-rope settings.</p>
+
+<h2 id="strength">4. Choosing a strength</h2>
+<div class="table-wrap"><table>
+  <tr><th>strength</th><th>what usually happens</th></tr>
+  <tr><td class="hi">+0.5 to +1</td><td>The everyday range. The effect is clear and the scene stays the same.</td></tr>
+  <tr><td class="hi">+1 to +2</td><td>Strong. Side effects start: the scene restages, characters change.</td></tr>
+  <tr><td class="hi">above +2</td><td>Transformations. Can be great on purpose, rarely subtle.</td></tr>
+</table></div>
+<p>The same holds for the negative side. Some dials only work in one direction.</p>
+<p>Behaviour often flips at a threshold rather than growing smoothly. A psychedelic dial on an anime kitsune character
+  (1 seed, colour swing between the dial's on and off windows):</p>
+<div class="table-wrap"><table>
+  <tr><th>strength</th><th>+1.0</th><th>+1.5</th><th>+1.8</th><th>+2.0</th><th>+2.5</th><th>+3.0</th><th>+4.0</th></tr>
+  <tr><td>colour swing</td><td>+3</td><td>+5</td><td>+15</td><td>+27</td><td>+30</td><td>+32</td><td>+37</td></tr>
+</table></div>
+<p>Up to +1.5 she stays herself and the world turns trippy. From +2.0 she becomes a different, masked figure every time.
+  So the useful choices were +1.5 or +2.0, not the values between. When you test a dial, try a ladder of strengths on one
+  seed and look for where it flips.</p>
+<p>Each dial file can carry its own <b>useful</b> and <b>overcook</b> strengths. The rack's map draws them as rings, and
+  the <b>⚙</b> button on a row lets you write down what you found.</p>
+
+<h2 id="rack">5. The Dial Rack</h2>
+<figure><img src="img/rack_map.jpg" alt="The Dial Rack with rows of dials on the left and a 2D map and interaction grid on the right">
+  <figcaption>Rows on the left; the map, interaction grid and "who pushes" bars on the right.</figcaption></figure>
+<p>One row per dial. <b>+ Add dial</b> adds a row; a dial wired into a <code>dial_</code> socket (straight from a Make
+  Dial node) appears as a row too.</p>
+<ul>
+  <li><b>Checkbox</b> turns a row on or off. <b>Slider</b> and <b>number</b> set the strength.</li>
+  <li><b>S</b> solos a row. <b>H</b> (hold) keeps that quality out of the mix instead of adding it: for example, hold
+    "loudness" while a face dial makes faces more expressive.</li>
+  <li><b>Map</b> opens a square where two rows move together: drag the dot to set both strengths. Inner ring = useful,
+    outer ring = overcooked. <b>Sweep 3×3</b> queues nine renders around the dot.</li>
+  <li>The <b>interaction grid</b> shows which dials reinforce (warm) or cancel (blue) each other. The <b>wheel</b> shows
+    each dial against 14 probe axes (motion, light, colour, mood, voice...). Both are maths on the files, not renders.</li>
+  <li><b>Save preset</b> / <b>Load preset</b> keep the rows (file names and settings, never weights).</li>
+  <li>Row order does not change the result.</li>
+</ul>
+<figure><img src="img/rack_wheel.jpg" alt="The influence wheel showing each dial as a layer over fourteen probe axes">
+  <figcaption>The wheel. About half of a typical dial is not explained by the 14 axes; the readout says how much.</figcaption></figure>
+
+<h2 id="prompts">6. Make a dial from prompts</h2>
+<ol>
+  <li>Add <b>Make Dial</b> and connect the H3 CLIP and MODEL.</li>
+  <li>Write pairs, one per line, as <code>A ||| B</code>. Use <code>{subject}</code> and list 4 to 8 different subjects
+    below; each pair is repeated for every subject.</li>
+  <li>Give it a name and labels for the two sides (what − and + give).</li>
+  <li>Queue once. The dial is saved to <code>models/loras/dials/&lt;name&gt;.safetensors</code> and also comes out of the
+    node, so you can wire it straight into a rack row. Making one takes about a minute.</li>
+  <li>The report shows <b>pair agreement</b>: above 0.6 means your pairs point the same way.</li>
+</ol>
+<pre><code>{subject} stands perfectly still. ||| {subject} moves energetically.
+{subject} in a calm, motionless scene. ||| {subject} in a lively scene full of motion.</code></pre>
+<figure><img src="img/guide_make_dial.jpg" alt="The Make Dial node with a prompt set, a subjects list, a name and the dial info fields">
+  <figcaption>Make Dial with a prompt set (weighted <code>+</code>/<code>-</code> lines) and the dial info fields filled in.</figcaption></figure>
+<h3>Writing pairs that work</h3>
+<ul>
+  <li><b>Change one thing.</b> A and B should be identical except for the quality you want.</li>
+  <li><b>Pairs are learned literally.</b> "runs past the camera" teaches subjects to leave the frame. Describe the effect
+    you want, in place.</li>
+  <li><b>Don't put actions on one side only.</b> Energetic actions named on one side taught storm and handheld-camera dials motion instead.</li>
+  <li><b>Dials steer H3's sound too.</b> A mood dial can change voices. Check dialogue scenes by ear.</li>
+  <li>Adults only as subjects for face and body dials.</li>
+</ul>
+<h3>Extras</h3>
+<ul>
+  <li><code>A ||| B :: 2</code> counts a pair twice.</li>
+  <li><b>Prompt sets:</b> lines starting <code>+2</code>, <code>+1</code>, <code>-1</code> build a dial from more than two
+    prompts (the weighted mean of the + lines minus the − lines).</li>
+  <li><b>Hold pairs:</b> a line starting <code>!</code> is a quality the dial must not change, e.g.
+    <code>! {subject} speaks quietly. ||| {subject} speaks loudly.</code> In one test a face dial raised voice level
+    +4.8 dB; with loudness held, +1.7 dB, and the faces stayed animated (3 seeds).</li>
+  <li><b>Word weights</b> inside a pair: <code>(expressive:2)</code>.</li>
+</ul>
+
+<h2 id="pictures">7. Make a dial from pictures</h2>
+<ol>
+  <li>Add <b>Make Dial from Pictures</b> and connect CLIP and MODEL.</li>
+  <li>Wire pictures for side A into <code>pictures_a</code> or the <code>group_a</code> sockets (a new socket appears for
+    each), and side B the same way. Any size, any number.</li>
+  <li>Match them: same framing, light and background at each position, changing only the quality you want.</li>
+  <li>Pick a <b>framing</b>: <code>content</code> (what is in the picture), <code>look</code> (style and grade),
+    <code>bare</code>, <code>all averaged</code>, or your own sentence.</li>
+  <li>Queue, then use the dial like any other.</li>
+</ol>
+<figure><img src="img/guide_pictures.jpg" alt="The Make Dial from Pictures node with picture inputs, framing text, name, labels and strength fields">
+  <figcaption>Make Dial from Pictures. Ready-made graphs: one pair, picture groups, or two folders.</figcaption></figure>
+<div class="note">Picture dials come out weaker than text dials. A lizard–squirrel dial from 12 photo pairs was 0.6× the size
+  of the text version, so the examples use it at −4.</div>
+
+<h2 id="time">8. Change a dial over the clip</h2>
+<p>A dial can come in, go out or swell during the clip, inside one generation. Click <b>time</b> on a row and draw the
+  curve: <b>0</b> = off, <b>1</b> = the row's strength.</p>
+<figure><img src="img/rack_time_curve.jpg" alt="The time-curve editor with a keyframe line ramping up over a 5-second clip">
+  <figcaption>Off until 0.8 s, then ramping up to full at 4.3 s.</figcaption></figure>
+<ul>
+  <li><b>Click</b> to add a point, <b>drag</b> to move it, <b>double-click</b> to delete. Shift+click or Ctrl+drag selects
+    several; the arrow keys nudge them.</li>
+  <li><b>times</b>: use <code>seconds</code> to match timings written in your prompt ("from 2 s, ...").</li>
+  <li>Presets: off → on, on → off, ramp up, ramp down, dip.</li>
+  <li><b>audio-driven</b>: connect music to the rack's <code>curve_audio</code> and follow its loudness or onsets.</li>
+  <li>Each curve costs one extra model call on the first 2 steps (about 1.24× render time).</li>
+</ul>
+<h3>What to expect</h3>
+<ul>
+  <li><b>Draw sections, not beats.</b> Colour and style dials switch within 0.1 to 0.2 s; lighting dials ramp over about
+    1.5 s. None of them follows individual drum hits.</li>
+  <li><b>About a fifth leaks.</b> The "off" part of a day–night curve still got about 20 % of the darkening.</li>
+  <li><b>Describe the change in the prompt.</b> "The world begins to melt, slowly and smoothly, into flowing rainbow light"
+    turned hard switches into visible in-between frames. The curve sets <em>when</em>; the prompt sets <em>how</em>.</li>
+  <li><b>Keep levels between 0 and 1.</b> Above 1 or below 0 is weaker than it looks. For a negative stretch (a motion
+    freeze for a hit-pause, say), add a second row of the same dial at a negative strength and give it a 0-to-1 curve.
+    A motion row at −6 for a second froze a punch's impact (motion 8.6 → 1.2, with a reference image).</li>
+</ul>
+
+<h2 id="derope">9. Dials with de-rope</h2>
+<p>De-rope fixes smeared fast motion: it finds the stretches that move too fast, slows them, re-renders them and maps the
+  clip back to real time.</p>
+<ul>
+  <li><b>On the Simple workflow</b> it is one switch, and one rack drives both passes. Off skips the whole second pass
+    (75 s, and the output is pass 1 unchanged); on took 276 s from scratch on our test scene.</li>
+  <li><b>Time curves follow real clip time</b> through the de-rope. The second pass renders a longer, stretched clip, and
+    without help a curve would land 0.3 to 0.5 s early. The Simple node handles it.</li>
+  <li><b>Building your own graph:</b> put a <b>Dial Hold Map</b> node between the rack's model and the second pass, and wire
+    H3 Time Smear's <code>hold_map_used</code> into it. Same result as a second copy of the rack (pixel-identical in our
+    test), with one rack to keep in sync.</li>
+</ul>
+<figure><img src="img/derope.jpg" alt="Four panels: base H3 at 25 steps, and Pika plus de-rope at dread 0, +0.5 and +1"></figure>
+
+<h2 id="more">10. Blocks, audio, editor, other models</h2>
+<h3>Block strengths</h3>
+<p><b>blocks</b> on a row opens a strip with one cell per model block (50 on H3). Paint how much of the dial each block
+  gets. Presets: all, none, first half, second half, odd, even. In our tests the first half of the model carries the whole
+  effect.</p>
+<h3>Keep the soundtrack clean</h3>
+<p>On a time-curve row, <b>audio: protect</b> keeps the dial off the soundtrack. Speech errors went from 0.29 to 0.00 in 3 of
+  4 cases. It is partial: the sound still hears the dialled video.</p>
+<h3>Dial editor (✎)</h3>
+<figure><img src="img/guide_editor.jpg" alt="The dial editor: probe bars showing how much motion, colour, light and mood a villain dial contains, with export fields">
+  <figcaption>The editor on a "cold" villain dial: it is mostly colour temperature and menace.</figcaption></figure>
+<p>Shows what a dial contains along the probe axes. Drag a bar to 0 to take that flavour out (say, the colour out of a mood
+  dial), then <b>Export new dial</b>. The new file records its parent. Its strengths start as unknown: render it before
+  you trust it.</p>
+<h3>Other models</h3>
+<div class="table-wrap"><table>
+  <tr><th>model</th><th>status</th><th>strengths</th></tr>
+  <tr><td>MiniMax H3 (incl. Pika H3 Flex)</td><td>everything on this page</td><td>±0.5 to ±2</td></tr>
+  <tr><td>MOSS-Image</td><td>text dials, rack, holds, envelopes</td><td>about ±4, overcooks near ±8</td></tr>
+  <tr><td>Krea 2</td><td>partial: one side of day–night and weather</td><td>to about −4; colour grades break</td></tr>
+</table></div>
+<p>The nodes detect the model; there is nothing to set. A dial made for one model refuses to load on another.
+  Picture dials, the wheel and the editor are H3 only.</p>
+
+<h2 id="trouble">11. When it goes wrong</h2>
+<div class="table-wrap"><table>
+  <tr><th>you see</th><th>try</th></tr>
+  <tr><td>Nothing changes</td><td>Raise the strength (picture dials need more). Check the row is on and nothing else is soloed.</td></tr>
+  <tr><td>The whole scene changes</td><td>Lower the strength; past +1.5 scenes restage. Check the pairs differ in one thing only.</td></tr>
+  <tr><td>The dial brings something extra (outfits, colour)</td><td>Pairs leak. A psychedelic dial also brings rave outfits at +2.5. Add a hold pair, or remove that probe in the editor.</td></tr>
+  <tr><td>Voices change</td><td>Use audio: protect, or hold loudness in the pairs. Sinister crushes speech.</td></tr>
+  <tr><td>A curve lands early in a de-rope run</td><td>Your own graph needs a Dial Hold Map before the second pass (the Simple node has one).</td></tr>
+  <tr><td>A transition looks like a hard cut</td><td>Describe the transition in the prompt, and use a reference image to keep the scene steady.</td></tr>
+</table></div>
+<p>More detail: the <a href="https://github.com/matlowai/ComfyUI-MAINodes/blob/main/dials/README.md">Dials reference</a>
+  and <a href="https://github.com/matlowai/ComfyUI-MAINodes/blob/main/dials/LESSONS.md">everything we learned</a>. In
+  ComfyUI, the Node Info panel on the Dial Rack and on Make Dial from Pictures has the same help.</p>
+
+<footer>
+  <p>Dials are alpha. Code: GPL-3.0-or-later (MAINodes), AGPL-3.0 (ComfyUI-Dials). Dial weight files fall under the
+    MiniMax H3 Community License Agreement. Powered by MiniMax H3.</p>
+  <p>MatlowAI · 2026</p>
+</footer>
+</main>
+</body>
+</html>
