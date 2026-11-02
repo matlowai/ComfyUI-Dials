@@ -2,6 +2,11 @@
 
 **[▶ Demo video and project page](https://matlowai.github.io/ComfyUI-Dials/)**
 
+> **New Dials work lives in [ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes):** the Dial Rack (any number
+> of dials with a map and interaction view), dials from pictures, strength over the clip, de-rope with one switch, and
+> MOSS-Image support. Start with the **[step-by-step guide](https://matlowai.github.io/ComfyUI-Dials/guide.html)**.
+> This repo stays the small, stable original; both packs read the same dial files.
+
 **Training-free steering dials for MiniMax H3, made from prompt pairs.** Write two prompts that differ in one quality,
 for example *"stands perfectly still"* vs *"runs across the scene"*. Dials turns the difference into a **~14 KB file**
 that works like a strength slider:
