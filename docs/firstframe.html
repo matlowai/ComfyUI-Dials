@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dials on a First Frame</title>
+<meta name="description" content="Image-to-video pins a look dial. Loosening the first frame with H3 Cond Strength lets it through, and at high strength the dial turns into content.">
+<meta property="og:title" content="Dials on a first frame · loosen the pin">
+<meta property="og:description" content="The clip starts exactly on your picture, then the dial takes over: two thirds of the look at +4, a skull-faced figure at +6.">
+<meta property="og:image" content="https://matlowai.github.io/ComfyUI-Dials/firstframe/g01_sin6.jpg">
+<style>
+  /* Matches the Dials site: one dark theme, gold accent, system type. Layout: one column of strength strips. */
+  :root { --bg: #0e0f13; --panel: #171920; --line: #25262c; --fg: #f2f2f0; --muted: #9a9ba0;
+          --gold: #ffc145; --blue: #4f8ff7; --warn: #f08a4b; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding-block: 0 64px;
+         padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header { padding: 48px 0 12px; }
+  h1 { font-size: clamp(40px, 8vw, 72px); line-height: 1; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .tag { color: var(--gold); font-size: clamp(18px, 2.6vw, 22px); margin: 0 0 16px; }
+  h2 { font-size: 28px; margin: 56px 0 6px; text-wrap: balance; }
+  h2 small { display: block; font-size: 13px; font-weight: 600; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  h4 { margin: 0 0 8px; font-size: 15px; color: var(--muted); font-weight: 600; }
+  p { margin: 0 0 14px; max-width: 75ch; }
+  a { color: var(--blue); }
+  nav { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 15px; margin: 4px 0 8px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 20px; }
+  .btn { display: inline-block; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel);
+         color: var(--fg); text-decoration: none; font-weight: 600; }
+  .btn.primary { background: var(--gold); color: #141519; border-color: var(--gold); }
+  .strip { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin: 14px 0; }
+  .strip .note { color: var(--muted); font-size: 14px; }
+  .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  figure { margin: 0; min-width: 0; }
+  video { width: 100%; max-width: 100%; aspect-ratio: 640 / 352; border-radius: 8px; border: 1px solid var(--line); background: #000; display: block; }
+  figcaption { font-size: 13px; margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; color: var(--muted); }
+  .k { color: var(--fg); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .flag { color: var(--warn); font-weight: 600; }
+  details.pairs { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin: 10px 0; }
+  details.pairs summary { cursor: pointer; font-weight: 600; }
+  details.pairs summary:focus-visible, .btn:focus-visible, video:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  pre { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
+  .small { font-size: 14px; color: var(--muted); }
+  ul li { margin-bottom: 6px; max-width: 75ch; }
+  footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 56px; padding-top: 20px; }
+  .pic { max-width: 420px; width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block; }
+  table { border-collapse: collapse; font-size: 14px; margin: 8px 0 16px; }
+  th, td { border: 1px solid var(--line); padding: 5px 9px; text-align: left; font-variant-numeric: tabular-nums; }
+  th { color: var(--muted); font-weight: 600; }
+  .wide video { aspect-ratio: auto; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Dials on a First Frame</h1>
+  <p class="tag">Image-to-video holds the look. Loosen the hold, and the dial comes back.</p>
+  <p>Give H3 a first frame and a look dial mostly stops working: the picture's light and colour carry through the clip,
+    however hard you push. These clips show what happens when the first frame is held more loosely with MAINodes'
+    <b>H3 Cond Strength</b> node (<code>guide_strength</code> below its default 0.999), using the <code>h3_evil_sinister</code>
+    dial on one scene. Pika H3 Flex, 6 steps, seed 42 for every clip, so treat it as a lead, not a rule.</p>
+  <div class="buttons">
+    <a class="btn primary" href="https://github.com/matlowai/ComfyUI-MAINodes/blob/dials-research/dials/research/experiments/T5j-high-strength-weak-pin.md">The write-up (measurements)</a>
+    <a class="btn" href="words.html">Word Dials</a>
+    <a class="btn" href="lab.html">Dials Lab</a>
+    <a class="btn" href="index.html">Dials home</a>
+  </div>
+  <nav><a href="#problem">The problem</a> <a href="#grid">The whole grid</a> <a href="#recipe">A recipe for the look</a> <a href="#content">Past +4: the dial becomes content</a> <a href="#notes">What else we tried</a></nav>
+</header>
+
+<h2 id="problem"><small>the problem</small>A first frame pins the look</h2>
+<p>Every image-to-video clip below starts from this picture (the first frame of the text-to-video control):</p>
+<img class="pic" src="firstframe/picture.jpg" alt="A woman in a red coat on a train platform at dusk, a yellow-nosed train arriving">
+<p>In text-to-video, sinister +1 turns the warm dusk cold and blue. Given the picture as a first frame, even +4 leaves the
+  warm sunset in place; only the train changes.</p>
+<div class="strip"><h4>No first frame vs a first frame at the default pin</h4><div class="row"><figure><video controls preload="none" poster="firstframe/t2v_ctl.jpg" src="firstframe/t2v_ctl.mp4"></video><figcaption><span class="k">text-to-video control</span><span class="d"></span></figcaption></figure><figure><video controls preload="none" poster="firstframe/t2v_sin1.jpg" src="firstframe/t2v_sin1.mp4"></video><figcaption><span class="k">text-to-video sinister +1</span><span class="d">cold, blue</span></figcaption></figure><figure><video controls preload="none" poster="firstframe/pin_ctl.jpg" src="firstframe/pin_ctl.mp4"></video><figcaption><span class="k">first frame, default pin</span><span class="d">control</span></figcaption></figure><figure><video controls preload="none" poster="firstframe/pin_sin4.jpg" src="firstframe/pin_sin4.mp4"></video><figcaption><span class="k">first frame, default pin, sinister +4</span><span class="d">still a warm dusk</span></figcaption></figure></div></div>
+
+<h2 id="grid"><small>overview</small>The whole grid</h2>
+<p>Rows: text-to-video, the default pin, and guide strength 0.3, 0.2, 0.1. Columns: control, +1, +2, +4, +6. Black cells
+  were not rendered. No sound in the grid; the clips further down have it.</p>
+<div class="strip wide"><video controls preload="none" poster="firstframe/tile.jpg" src="firstframe/tile.mp4"></video></div>
+<table>
+<tr><th>guide strength</th><th>opening vs the picture (pixel difference)</th><th>darkening at +4</th><th>cold shift at +6</th></tr>
+<tr><td>0.999 (default)</td><td>4</td><td>none</td><td>–</td></tr>
+<tr><td>0.3</td><td>~11</td><td>+8</td><td>+5</td></tr>
+<tr><td>0.2</td><td>~20</td><td>+9</td><td>+7</td></tr>
+<tr><td>0.1</td><td>~28</td><td><b>+12</b></td><td><b>+19</b></td></tr>
+<tr><td>text-to-video +1</td><td>–</td><td>+18</td><td>+18</td></tr>
+</table>
+<p>How close the opening stays to the picture depends only on the guide strength, not on the dial strength.</p>
+
+<h2 id="recipe"><small>a recipe</small>Most of the look, the same opening</h2>
+<p><b>Guide strength 0.1 with the dial at +4</b> gives about two thirds of the text-to-video darkening while the clip
+  still opens on the picture. At 0.2 and 0.3 the opening stays closer to the picture and you get about half.</p>
+<div class="strip"><h4>Guide strength 0.1</h4><div class="row"><figure><video controls preload="none" poster="firstframe/g01_ctl.jpg" src="firstframe/g01_ctl.mp4"></video><figcaption><span class="k">guide 0.1, control</span><span class="d"></span></figcaption></figure><figure><video controls preload="none" poster="firstframe/g01_sin4.jpg" src="firstframe/g01_sin4.mp4"></video><figcaption><span class="k">guide 0.1, sinister +4</span><span class="d">darker and cooler</span></figcaption></figure></div></div>
+<div class="strip"><h4>Guide strength 0.3</h4><div class="row"><figure><video controls preload="none" poster="firstframe/g03_ctl.jpg" src="firstframe/g03_ctl.mp4"></video><figcaption><span class="k">guide 0.3, control</span><span class="d"></span></figcaption></figure><figure><video controls preload="none" poster="firstframe/g03_sin2.jpg" src="firstframe/g03_sin2.mp4"></video><figcaption><span class="k">guide 0.3, sinister +2</span><span class="d">darker platform</span></figcaption></figure></div></div>
+
+<h2 id="content"><small>the fun part</small>Past +4: the dial becomes content</h2>
+<p>Push to +6 at a loose pin and sinister stops changing the light and starts changing <em>what is there</em>. The clip
+  still starts exactly on the picture, then turns into something sinister: at guide 0.2 a spiky, dragon-like head pushes into
+  the frame; at 0.1 the woman becomes a skull-faced figure under a cold, overcast sky.</p>
+<div class="strip"><h4>Sinister +6</h4><div class="row"><figure><video controls preload="none" poster="firstframe/g02_ctl.jpg" src="firstframe/g02_ctl.mp4"></video><figcaption><span class="k">guide 0.2, control</span><span class="d"></span></figcaption></figure><figure><video controls preload="none" poster="firstframe/g02_sin6.jpg" src="firstframe/g02_sin6.mp4"></video><figcaption><span class="k">guide 0.2, sinister +6</span><span class="d">a creature pushes in</span></figcaption></figure><figure><video controls preload="none" poster="firstframe/g01_sin6.jpg" src="firstframe/g01_sin6.mp4"></video><figcaption><span class="k">guide 0.1, sinister +6</span><span class="d">a skull-faced figure</span></figcaption></figure></div></div>
+
+<h2 id="notes"><small>notes</small>What else we tried</h2>
+<ul>
+  <li><b>More strength at the default pin</b> (up to +4): nothing reaches the light; the push moves the train instead.</li>
+  <li><b>Leaving the picture's rows in the text unshifted</b>: no help. The first frame also enters the video model
+    directly, where a dial never reaches.</li>
+  <li><b>A reference picture (Ref2V) instead of a first frame</b>: it holds the look just as firmly.</li>
+  <li><b>Simplest advice still holds:</b> if you can, apply the look dial when you <em>make</em> the first frame.</li>
+</ul>
+<p class="small">One scene and one seed. All numbers, settings and the earlier steps are in the
+  <a href="https://github.com/matlowai/ComfyUI-MAINodes/blob/dials-research/dials/research/README.md">Dials research notes</a> (T5 to T5j).</p>
+<footer>Made with ComfyUI-MAINodes Dial Rack and H3 Cond Strength, MiniMax H3 and Pika H3 Flex. Dial files are Model
+  Derivatives of MiniMax H3 under the MiniMax H3 Community License Agreement. Powered by MiniMax H3.</footer>
+</main>
+</body>
+</html>
