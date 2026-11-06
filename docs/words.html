@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Word Dials · from four words</title>
+<meta name="description" content="Dials for MiniMax H3 made from four words and no prompt pairs, using a Jacobian lens on the text encoder. Clips with sound, a placebo, and what did not work.">
+<meta property="og:title" content="Word Dials · a dial from four words">
+<meta property="og:description" content="Underwater turns a train platform into a harbour; thunder makes the soundtrack ~21 dB louder than a placebo. No prompt pairs.">
+<meta property="og:image" content="https://matlowai.github.io/ComfyUI-Dials/words/underwater.jpg">
+<style>
+  /* Matches the Dials site: one dark theme, gold accent, system type. Layout: one column of strength strips. */
+  :root { --bg: #0e0f13; --panel: #171920; --line: #25262c; --fg: #f2f2f0; --muted: #9a9ba0;
+          --gold: #ffc145; --blue: #4f8ff7; --warn: #f08a4b; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding-block: 0 64px;
+         padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header { padding: 48px 0 12px; }
+  h1 { font-size: clamp(40px, 8vw, 72px); line-height: 1; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .tag { color: var(--gold); font-size: clamp(18px, 2.6vw, 22px); margin: 0 0 16px; }
+  h2 { font-size: 28px; margin: 56px 0 6px; text-wrap: balance; }
+  h2 small { display: block; font-size: 13px; font-weight: 600; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  h4 { margin: 0 0 8px; font-size: 15px; color: var(--muted); font-weight: 600; }
+  p { margin: 0 0 14px; max-width: 75ch; }
+  a { color: var(--blue); }
+  nav { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 15px; margin: 4px 0 8px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 20px; }
+  .btn { display: inline-block; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel);
+         color: var(--fg); text-decoration: none; font-weight: 600; }
+  .btn.primary { background: var(--gold); color: #141519; border-color: var(--gold); }
+  .strip { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin: 14px 0; }
+  .strip .note { color: var(--muted); font-size: 14px; }
+  .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  figure { margin: 0; min-width: 0; }
+  video { width: 100%; max-width: 100%; aspect-ratio: 640 / 352; border-radius: 8px; border: 1px solid var(--line); background: #000; display: block; }
+  figcaption { font-size: 13px; margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; color: var(--muted); }
+  .k { color: var(--fg); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .flag { color: var(--warn); font-weight: 600; }
+  details.pairs { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin: 10px 0; }
+  details.pairs summary { cursor: pointer; font-weight: 600; }
+  details.pairs summary:focus-visible, .btn:focus-visible, video:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  pre { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
+  .small { font-size: 14px; color: var(--muted); }
+  ul li { margin-bottom: 6px; max-width: 75ch; }
+  footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 56px; padding-top: 20px; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Word Dials</h1>
+  <p class="tag">A dial from four words, with no prompt pairs.</p>
+  <p>Every other dial on this site was made from about ten pairs of prompts. These were made from a list of four words, like
+    <em>underwater, submerged, bubbles, aquatic</em>, by asking the text encoder which direction makes it more disposed to say
+    those words. This is part of ongoing work with <a href="https://github.com/fblissjr">fredbliss</a>, who brought the
+    Jacobian lens to H3 and made the first keyword dials; what follows is our own reimplementation, and we compare notes as we
+    go. Same scene, seed and strength for every clip; Pika H3 Flex, 6 steps, text-to-video. <b>Turn the sound on</b>:
+    half of the result is in the soundtrack.</p>
+  <div class="buttons">
+    <a class="btn primary" href="https://github.com/matlowai/ComfyUI-MAINodes/blob/dials-research/dials/research/experiments/J1-J3-word-dials.md">The write-up (measurements)</a>
+    <a class="btn" href="lab.html">Dials Lab</a>
+    <a class="btn" href="index.html">Dials home</a>
+  </div>
+  <nav><a href="#placebo">Start with the placebo</a> <a href="#hits">What worked</a> <a href="#places">Words become places</a> <a href="#combos">Combinations</a> <a href="#misses">What did not work</a> <a href="#how">How it works</a></nav>
+</header>
+
+<h2 id="placebo"><small>read this first</small>The control and a placebo</h2>
+<p>A dial this strong reshuffles any scene a little, whatever it means. So every clip below is judged against a dial of the
+  same size made from four bland words (<em>table, number, between, also</em>). The placebo gives a different train and a
+  quieter soundtrack (−9 dB), and nothing else.</p>
+<div class="strip"><h4>Train platform at dusk, seed 42</h4><div class="row"><figure><video controls preload="none" poster="words/ctl.jpg" src="words/ctl.mp4"></video><figcaption><span class="k">control</span><span class="d">no dial, −24.5 LUFS</span></figcaption></figure><figure><video controls preload="none" poster="words/bland.jpg" src="words/bland.mp4"></video><figcaption><span class="k">bland words +2</span><span class="d">placebo: restaged, −9.3 dB</span></figcaption></figure></div></div>
+
+<h2 id="hits"><small>worked on the first try</small>Underwater and thunder</h2>
+<p><b>Underwater</b> turns the platform into a harbourside: open water, moored boats, and the train ploughing through water
+  with a bow splash. <b>Thunder</b> is mostly heard: the soundtrack is ~12 dB louder than the control (~21 dB louder than the
+  placebo, which quiets things) and its energy below 150 Hz doubles, with windswept hair and a low, dramatic sun. Its nearest
+  prompt-pair dials in our library are the storm and voice-energy dials; underwater's nearest include our underwater dial.</p>
+<div class="strip"><h4>Four words each, strength +2</h4><div class="row"><figure><video controls preload="none" poster="words/underwater.jpg" src="words/underwater.mp4"></video><figcaption><span class="k">underwater +2</span><span class="d">water, boats, splash</span></figcaption></figure><figure><video controls preload="none" poster="words/thunder.jpg" src="words/thunder.mp4"></video><figcaption><span class="k">thunder +2</span><span class="d">+11.8 dB, twice the low end</span></figcaption></figure><figure><video controls preload="none" poster="words/hush.jpg" src="words/hush.mp4"></video><figcaption><span class="k">hush +2</span><span class="d">−15.9 dB; only ~7 dB beyond the placebo</span><span class="flag">borderline</span></figcaption></figure></div></div>
+
+<h2 id="places"><small>a surprise</small>Words become places</h2>
+<p>Words with a strong sense of place change the setting rather than the surface. <b>Stained glass</b> (stained, glass,
+  cathedral, mosaic) builds a grand station hall under a vaulted glass roof, not coloured glass. <b>Origami</b> moves the whole
+  scene to a Japanese station: the dial carries what the word evokes, not folded paper.</p>
+<div class="strip"><h4>Place words, +2</h4><div class="row"><figure><video controls preload="none" poster="words/stainedglass.jpg" src="words/stainedglass.mp4"></video><figcaption><span class="k">stained glass +2</span><span class="d">a glass-vaulted hall</span></figcaption></figure><figure><video controls preload="none" poster="words/origami.jpg" src="words/origami.mp4"></video><figcaption><span class="k">origami +2</span><span class="d">a Japanese station</span></figcaption></figure></div></div>
+
+<h2 id="combos"><small>two rows</small>Combinations</h2>
+<p>Two word dials at 1.5 each. Thunder survives being mixed with underwater (stormy, steam blowing off the train, +6 dB),
+  but the water does not appear at this strength. Stained glass + hush gives the glass hall again.</p>
+<div class="strip"><h4>Two rows at 1.5 each</h4><div class="row"><figure><video controls preload="none" poster="words/x_seastorm.jpg" src="words/x_seastorm.mp4"></video><figcaption><span class="k">underwater + thunder</span><span class="d">wind, steam, +6.2 dB</span></figcaption></figure><figure><video controls preload="none" poster="words/x_quietglass.jpg" src="words/x_quietglass.mp4"></video><figcaption><span class="k">stained glass + hush</span><span class="d">glass hall, −14.5 dB</span></figcaption></figure><figure><video controls preload="none" poster="words/x_glowrust.jpg" src="words/x_glowrust.mp4"></video><figcaption><span class="k">bioluminescent + rust</span><span class="d">restaging only</span><span class="flag">no effect</span></figcaption></figure></div></div>
+
+<h2 id="misses"><small>honest results</small>What did not work</h2>
+<p>Words for a surface look mostly did not come through: bioluminescent (no glow), static (a colder blue hour, no TV static),
+  vertigo (a different station, little motion). And the shortcut failed completely: reading words straight off the model's
+  output layer (a "logit lens") gave dials that behave exactly like the placebo, underwater included.</p>
+<div class="strip"><h4>Look words, +2</h4><div class="row"><figure><video controls preload="none" poster="words/biolum.jpg" src="words/biolum.mp4"></video><figcaption><span class="k">bioluminescent +2</span><span class="d">no glow</span><span class="flag">no effect</span></figcaption></figure><figure><video controls preload="none" poster="words/static.jpg" src="words/static.mp4"></video><figcaption><span class="k">static +2</span><span class="d">cold blue hour</span></figcaption></figure><figure><video controls preload="none" poster="words/vertigo.jpg" src="words/vertigo.mp4"></video><figcaption><span class="k">vertigo +2</span><span class="d">little effect</span><span class="flag">no effect</span></figcaption></figure></div></div>
+<div class="strip"><h4>The shortcut: logit-lens word dials, +2</h4><div class="row"><figure><video controls preload="none" poster="words/logit_underwater.jpg" src="words/logit_underwater.mp4"></video><figcaption><span class="k">underwater (logit lens)</span><span class="d">no water</span><span class="flag">no effect</span></figcaption></figure><figure><video controls preload="none" poster="words/logit_bland.jpg" src="words/logit_bland.mp4"></video><figcaption><span class="k">bland words (logit lens)</span><span class="d">the same restaging</span></figcaption></figure></div></div>
+
+<h2 id="how"><small>method</small>How it works</h2>
+<ul>
+  <li>H3's text encoder is the first 50 layers of Qwen3-VL-32B-Instruct. We checked that its weights match the upstream model
+    bit for bit, then borrowed upstream's last 14 layers and output layer, which H3 does not ship.</li>
+  <li>For each word, the <a href="https://github.com/anthropics/jacobian-lens">Jacobian lens</a> gives the direction at H3's
+    encoder output that makes the model more disposed to say that word, averaged over 56 prompts
+    (<a href="https://transformer-circuits.pub/2026/workspace/index.html">paper</a>). A list's direction is the mean over its words.</li>
+  <li>That direction is pushed through H3's own projection and token refiner, exactly where Make Dial measures a prompt pair,
+    and the result is debiased and scaled to the size of a typical dial.</li>
+  <li>The key step: every word list shares one big common direction, the bland list included. Only after removing it do
+    the dials point at their meaning.</li>
+</ul>
+<p class="small">One scene and one seed per clip, so these are leads, not results. The word dials are not released yet.
+  Ideas, plan and numbers live in the <a href="https://github.com/matlowai/ComfyUI-MAINodes/blob/dials-research/dials/research/README.md">Dials research notes</a>.</p>
+<footer>Jacobian-lens work on H3 in collaboration with <a href="https://github.com/fblissjr">fredbliss</a> (see his <a href="https://github.com/fblissjr/ComfyUI-h3-explorations/blob/main/docs/wiki/control_vectors.md">H3 control vectors guide</a>). Made with ComfyUI-MAINodes Dial Rack, MiniMax H3 and Pika H3 Flex. Dial files are Model Derivatives of
+  MiniMax H3 under the MiniMax H3 Community License Agreement. Powered by MiniMax H3.</footer>
+</main>
+</body>
+</html>
