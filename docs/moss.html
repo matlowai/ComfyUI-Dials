@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOSS-Image Dials</title>
+<meta name="description" content="Dials for MOSS-Image: ukiyo-e to cyberpunk, flat to punchy contrast, minimal to ornate and more, compared on MOSS SFT DeBand, MOSS Base and KroMoss.">
+<meta property="og:title" content="MOSS-Image Dials · three models compared">
+<meta property="og:description" content="Six prompt-pair dials made once and applied to MOSS SFT DeBand, MOSS Base and KroMoss.">
+<meta property="og:image" content="https://matlowai.github.io/ComfyUI-Dials/moss/og_cyberpunk.jpg">
+<style>
+  /* Matches the Dials site: one dark theme, gold accent, system type. Layout: one column of strength strips. */
+  :root { --bg: #0e0f13; --panel: #171920; --line: #25262c; --fg: #f2f2f0; --muted: #9a9ba0;
+          --gold: #ffc145; --blue: #4f8ff7; --warn: #f08a4b; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding-block: 0 64px;
+         padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header { padding: 48px 0 12px; }
+  h1 { font-size: clamp(40px, 8vw, 72px); line-height: 1; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .tag { color: var(--gold); font-size: clamp(18px, 2.6vw, 22px); margin: 0 0 16px; }
+  h2 { font-size: 28px; margin: 56px 0 6px; text-wrap: balance; }
+  h2 small { display: block; font-size: 13px; font-weight: 600; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  h4 { margin: 0 0 8px; font-size: 15px; color: var(--muted); font-weight: 600; }
+  p { margin: 0 0 14px; max-width: 75ch; }
+  a { color: var(--blue); }
+  nav { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 15px; margin: 4px 0 8px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 20px; }
+  .btn { display: inline-block; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel);
+         color: var(--fg); text-decoration: none; font-weight: 600; }
+  .btn.primary { background: var(--gold); color: #141519; border-color: var(--gold); }
+  .strip { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin: 14px 0; }
+  .strip .note { color: var(--muted); font-size: 14px; }
+  .row { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  figure { margin: 0; min-width: 0; }
+  video { width: 100%; max-width: 100%; aspect-ratio: 640 / 352; border-radius: 8px; border: 1px solid var(--line); background: #000; display: block; }
+  figcaption { font-size: 13px; margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; color: var(--muted); }
+  .k { color: var(--fg); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .flag { color: var(--warn); font-weight: 600; }
+  details.pairs { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin: 10px 0; }
+  details.pairs summary { cursor: pointer; font-weight: 600; }
+  details.pairs summary:focus-visible, .btn:focus-visible, video:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  pre { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9em; }
+  .small { font-size: 14px; color: var(--muted); }
+  ul li { margin-bottom: 6px; max-width: 75ch; }
+  footer { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); margin-top: 56px; padding-top: 20px; }
+  .strip img { width: 100%; height: auto; display: block; border-radius: 8px; border: 1px solid var(--line); }
+  .scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>MOSS-Image Dials</h1>
+  <p class="tag">Made once, on three models.</p>
+  <p>Dials work on MOSS-Image too. These six were made with Make Dial from prompt pairs on <b>MOSS SFT DeBand</b>, then
+    applied unchanged to <b>MOSS Base</b> and <b>KroMoss</b>. Every image uses the same prompt (a lighthouse keeper on a rocky
+    coast, a scene none of the pairs mention) and the same seed. 1024×1024, 25 steps, cfg 3.</p>
+  <div class="buttons">
+    <a class="btn primary" href="#x_ukiyoe_cyberpunk">See the six</a>
+    <a class="btn" href="lab.html">Dials Lab</a>
+    <a class="btn" href="index.html">Dials home</a>
+  </div>
+  <nav><a href="#x_ukiyoe_cyberpunk">Ukiyo-e ↔ cyberpunk</a> <a href="#contrast_flat_punchy">Contrast: flat ↔ punchy</a> <a href="#detail_minimal_ornate">Detail: minimal ↔ ornate</a> <a href="#x_calm_chaos">Calm ↔ chaos</a> <a href="#film_digital_70s">Film: clean digital ↔ 1970s</a> <a href="#x_tiny_colossal">Tiny ↔ colossal</a> <a href="#all">All eleven</a> <a href="#notes">Notes</a></nav>
+</header>
+<h2 id="x_ukiyoe_cyberpunk"><small>style continuum</small>Ukiyo-e ↔ cyberpunk</h2><p>The strongest one. At −4 the scene becomes an Edo-style woodblock print on aged paper (on Base and KroMoss a proper figure drawing); at +4 a neon cyberpunk night with a glowing lighthouse and light-trail paths. Works on all three models.</p>
+<div class="strip"><div class="scroll"><img src="moss/x_ukiyoe_cyberpunk.jpg" alt="Ukiyo-e ↔ cyberpunk: −4, control and +4 on MOSS SFT DeBand, MOSS Base and KroMoss"></div>
+<p class="note">Each model: −4 · control · +4. Same prompt and seed throughout.</p></div>
+<details class="pairs"><summary>The prompt pairs that made it</summary><pre># A: Edo-period ukiyo-e woodblock print | B: neon cyberpunk
+{subject}, an Edo-period ukiyo-e woodblock print, flat colours and bold outlines. ||| {subject}, a neon cyberpunk scene, glowing signs and rain-slick reflections.
+{subject}, in the style of a traditional Japanese woodblock print. ||| {subject}, in a futuristic cyberpunk style with holograms and neon light.
+{subject}, a classic ukiyo-e composition on washi paper. ||| {subject}, a high-tech cyberpunk image, electric pink and cyan.</pre><p class="small"><code>{subject}</code> runs over six scenes: An elderly fisherman mending a net on a wooden dock; A quiet suburban street with parked cars; A bowl of fruit on a kitchen table; A mountain lake surrounded by pine trees; A young woman reading in a café; A vintage bicycle leaning against a brick wall.</p></details>
+<h2 id="contrast_flat_punchy"><small>image look</small>Contrast: flat ↔ punchy</h2><p>−4 hazy, pale and washed out; +4 deep blacks, bright highlights, a fiery sky. On Base and KroMoss −4 goes all the way to a white fog: use about half the strength there.</p>
+<div class="strip"><div class="scroll"><img src="moss/contrast_flat_punchy.jpg" alt="Contrast: flat ↔ punchy: −4, control and +4 on MOSS SFT DeBand, MOSS Base and KroMoss"></div>
+<p class="note">Each model: −4 · control · +4. Same prompt and seed throughout.</p></div>
+<details class="pairs"><summary>The prompt pairs that made it</summary><pre># A: soft flat low contrast | B: punchy high contrast
+{subject}, a soft, flat, low-contrast photograph with gentle muted tones and lifted grey shadows. ||| {subject}, a punchy, high-contrast photograph with deep black shadows and bright crisp highlights.
+{subject}, photographed in hazy, even light, everything soft and washed out. ||| {subject}, photographed in hard light, strong contrast, inky blacks and brilliant whites.
+{subject}, a low-contrast matte image with pale, milky tones. ||| {subject}, a high-contrast image with dramatic, bold darks and lights.</pre><p class="small"><code>{subject}</code> runs over six scenes: An elderly fisherman mending a net on a wooden dock; A quiet suburban street with parked cars; A bowl of fruit on a kitchen table; A mountain lake surrounded by pine trees; A young woman reading in a café; A vintage bicycle leaning against a brick wall.</p></details>
+<h2 id="detail_minimal_ornate"><small>image look</small>Detail: minimal ↔ ornate</h2><p>−4 a bare headland and simple shapes; +4 a satchel, gear, flowers and perched gulls, and on KroMoss a filigreed, flower-covered lighthouse.</p>
+<div class="strip"><div class="scroll"><img src="moss/detail_minimal_ornate.jpg" alt="Detail: minimal ↔ ornate: −4, control and +4 on MOSS SFT DeBand, MOSS Base and KroMoss"></div>
+<p class="note">Each model: −4 · control · +4. Same prompt and seed throughout.</p></div>
+<details class="pairs"><summary>The prompt pairs that made it</summary><pre># A: minimal, sparse | B: intricate, ornate
+{subject}, a minimal, sparse composition with clean empty space and simple shapes. ||| {subject}, an intricate, ornate composition packed with fine detail and decoration.
+{subject}, pared back and uncluttered, very few elements. ||| {subject}, richly detailed, every surface patterned and embellished.
+{subject}, calm minimalism, plain surfaces. ||| {subject}, maximalist abundance, layered ornament everywhere.</pre><p class="small"><code>{subject}</code> runs over six scenes: An elderly fisherman mending a net on a wooden dock; A quiet suburban street with parked cars; A bowl of fruit on a kitchen table; A mountain lake surrounded by pine trees; A young woman reading in a café; A vintage bicycle leaning against a brick wall.</p></details>
+<h2 id="x_calm_chaos"><small>abstract</small>Calm ↔ chaos</h2><p>−4 a quiet path; +4 the keeper scrambling over the rail with more gulls and people, and on Base and KroMoss clutter piled onto the cliff.</p>
+<div class="strip"><div class="scroll"><img src="moss/x_calm_chaos.jpg" alt="Calm ↔ chaos: −4, control and +4 on MOSS SFT DeBand, MOSS Base and KroMoss"></div>
+<p class="note">Each model: −4 · control · +4. Same prompt and seed throughout.</p></div>
+<details class="pairs"><summary>The prompt pairs that made it</summary><pre># A: calm, still, orderly | B: chaotic, crowded, frantic
+{subject}, calm, still and orderly, a peaceful, quiet moment. ||| {subject}, chaotic, crowded and frantic, a noisy, overwhelming moment.
+{subject}, serene and uncluttered, nothing moving. ||| {subject}, a jumble of motion, objects and people everywhere.
+{subject}, tranquil and balanced. ||| {subject}, wild and disordered.</pre><p class="small"><code>{subject}</code> runs over six scenes: An elderly fisherman mending a net on a wooden dock; A quiet suburban street with parked cars; A bowl of fruit on a kitchen table; A mountain lake surrounded by pine trees; A young woman reading in a café; A vintage bicycle leaning against a brick wall.</p></details>
+<h2 id="film_digital_70s"><small>era</small>Film: clean digital ↔ 1970s</h2><p>+4 is warm and faded on all three; KroMoss even adds a print border. −4 is crisp modern daylight.</p>
+<div class="strip"><div class="scroll"><img src="moss/film_digital_70s.jpg" alt="Film: clean digital ↔ 1970s: −4, control and +4 on MOSS SFT DeBand, MOSS Base and KroMoss"></div>
+<p class="note">Each model: −4 · control · +4. Same prompt and seed throughout.</p></div>
+<details class="pairs"><summary>The prompt pairs that made it</summary><pre># A: clean modern digital photo | B: 1970s analog film photo
+{subject}, a clean, modern digital photograph, sharp, neutral colours. ||| {subject}, a 1970s analog film photograph, warm faded colours and visible film grain.
+{subject}, crisp contemporary photo, true-to-life colour. ||| {subject}, an old Kodachrome snapshot, nostalgic tones and soft grain.
+{subject}, a pristine high-resolution digital image. ||| {subject}, a vintage print from a film camera, slightly faded and grainy.</pre><p class="small"><code>{subject}</code> runs over six scenes: An elderly fisherman mending a net on a wooden dock; A quiet suburban street with parked cars; A bowl of fruit on a kitchen table; A mountain lake surrounded by pine trees; A young woman reading in a café; A vintage bicycle leaning against a brick wall.</p></details>
+<h2 id="x_tiny_colossal"><small>scale</small>Tiny ↔ colossal</h2><p>+4 is monumental: huge waves, a tiny figure. The tiny side only shows on Base and KroMoss, where −4 gives a little toy-like lighthouse.</p>
+<div class="strip"><div class="scroll"><img src="moss/x_tiny_colossal.jpg" alt="Tiny ↔ colossal: −4, control and +4 on MOSS SFT DeBand, MOSS Base and KroMoss"></div>
+<p class="note">Each model: −4 · control · +4. Same prompt and seed throughout.</p></div>
+<details class="pairs"><summary>The prompt pairs that made it</summary><pre># A: tiny tabletop miniature | B: colossal monumental scale
+{subject}, a tiny tabletop miniature, toy-like, seen up close with tilt-shift blur. ||| {subject}, colossal and monumental, towering over everything, seen from far below.
+{subject}, a small handmade model on a desk. ||| {subject}, a gigantic structure the size of a mountain.
+{subject}, a diorama small enough to hold in your hand. ||| {subject}, immense scale, tiny people dwarfed beside it.</pre><p class="small"><code>{subject}</code> runs over six scenes: An elderly fisherman mending a net on a wooden dock; A quiet suburban street with parked cars; A bowl of fruit on a kitchen table; A mountain lake surrounded by pine trees; A young woman reading in a café; A vintage bicycle leaning against a brick wall.</p></details>
+<h2 id="all"><small>everything we tried</small>All eleven on DeBand</h2>
+<p>The full first batch, misses included. The two optics dials (deep ↔ shallow focus, wide ↔ telephoto) mostly reframe the
+  shot; glass ↔ fur and solid ↔ melting are partial and odd (wet glossy stone, a path dissolving into mist); cat ↔ owl does
+  nothing here because the scene has no animal in it.</p>
+<div class="strip"><img src="moss/deband_all11.jpg" alt="All eleven MOSS dials at −4, control and +4 on MOSS SFT DeBand"></div>
+
+<h2 id="notes"><small>notes</small>What to know</h2>
+<ul>
+  <li><b>MOSS needs more strength than H3.</b> Classifier-free guidance pushes the negative prompt too, which halves a dial,
+    so on MOSS SFT DeBand ±4 is a clear effect. <b>MOSS Base and KroMoss react about twice as strongly</b> at the same
+    strength, so start around ±2 there.</li>
+  <li><b>One dial file works across the MOSS family.</b> All six were made on DeBand and still steer Base and KroMoss.</li>
+  <li><b>The subject has to be in the scene.</b> A creature dial (cat ↔ owl) does nothing to a lighthouse.</li>
+  <li><b>One prompt, one seed.</b> These are leads, not measured ranges.</li>
+</ul>
+<p class="small">Settings: ER-SDE sampler (max stage 3, eta 1.0, noise 1.05), simple scheduler, 25 steps, cfg 3, negative
+  prompt "worst quality, bad anatomy, watermark, jpeg artifact". Dials made with ComfyUI-MAINodes Make Dial (post-refiner
+  hook on MOSS's <code>text_embedder</code>, debias on). The dial files are not released yet.</p>
+<footer>Made with ComfyUI-MAINodes Make Dial and Dial Rack on MOSS-Image (SFT DeBand, Base) and KroMoss.</footer>
+</main>
+</body>
+</html>
