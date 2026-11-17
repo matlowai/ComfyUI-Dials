@@ -54,7 +54,7 @@ and crisper frames. [▶ Full video with timings, motion and sharpness](assets/p
 | **Dial Rack nodes** (`MAIDialRack`, `MAIDialMake`, `MAIDialMakeFromPictures`, `MAIDialMakeFromVideos`, `MAIDialCombine`, `MAIDialHoldMap`) | `dials/*.py`, `web/` | Menu category **MAINodes/Dials**. Documented in **[dials/README.md](dials/README.md)**: the rack, step envelopes, block strengths, time curves, holds, presets, the map, the dial editor, model families. |
 | **Original nodes** (`DialsMakeDial`, `DialsApplyDial`, `DialsLoadDial`, `DialsCombineDials`, `DialsSaveDial`) | `nodes.py` | Menu category **Dials**. Unchanged from 0.1.0; MiniMax H3 only. Described [below](#original-nodes-category-dials). |
 | Released dial files | `dials/*.safetensors` | Unchanged. See [Released dials](#released-dials-dials). |
-| Example workflows | `workflows/` (original nodes), `examples/dials/` (rack) | Most of the `examples/dials/` workflows also use de-rope nodes from ComfyUI-MAINodes (`H3TimeSmear` and others); the three in `examples/dials/_archive/` named `one_dial`, `four_dials` and `pika_rack` use only the rack and core nodes. |
+| Example workflows | `workflows/` (original nodes), `examples/dials/` (rack) | Most of the `examples/dials/` workflows also use de-rope nodes from ComfyUI-MAINodes (`H3TimeSmear` and others); the three in `examples/dials/_archive/` named `one_dial`, `four_dials` and `pika_rack` use only the rack and core nodes. The full list, per workflow, is in [examples/dials/README.md](examples/dials/README.md). |
 | Blueprints | `blueprints/` | *Dials - Image* and *Dials - H3 + De-rope* (the second needs ComfyUI-MAINodes). Not auto-listed; copy one into a `subgraphs/` folder to get it in ComfyUI's blueprint list, or use MAINodes, which lists both. |
 | Notes | `dials/ROADMAP.md`, `dials/LESSONS.md`, `dials/docs/`, `dials/research/` | The roadmap, what was learned, design notes and the open research folder. |
 | Tests | `tests/` | `python tests/test_dial_rack.py` and the other `tests/test_*.py`; CPU only, no model files. They use the ComfyUI checkout two folders up, or `$COMFYUI_ROOT`. |
@@ -162,7 +162,8 @@ These are the five nodes this pack started with. For the Dial Rack nodes see [di
    - `workflows/dials_pika_h3_flex*.json`: the motion dial on Pika H3 Flex (6 steps), with and without de-rope. See
      [Pika H3 Flex + Dials](#pika-h3-flex--dials).
    - `examples/dials/_archive/one_dial.json`, `four_dials.json`, `pika_rack.json`: the Dial Rack with one or several
-     dials. The other `examples/dials/` workflows add de-rope and need ComfyUI-MAINodes.
+     dials. The other `examples/dials/` workflows add de-rope and need ComfyUI-MAINodes
+     ([which workflow needs what](examples/dials/README.md)).
 
    API-format twins (`*_api.json`) are included.
 
