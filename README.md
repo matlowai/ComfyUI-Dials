@@ -2,10 +2,12 @@
 
 **[▶ Demo video and project page](https://matlowai.github.io/ComfyUI-Dials/)**
 
-> **New Dials work lives in [ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes):** the Dial Rack (any number
-> of dials with a map and interaction view), dials from pictures, strength over the clip, de-rope with one switch, and
-> MOSS-Image support. Start with the **[step-by-step guide](https://matlowai.github.io/ComfyUI-Dials/guide.html)**.
-> This repo stays the small, stable original; both packs read the same dial files.
+> **This pack now contains the full Dials node set** (since 0.2.0): the Dial Rack (any number of dials, step envelopes,
+> strength over the clip, holds, a map and an interaction view), Make Dial from prompt pairs, pictures or videos, and
+> MOSS-Image and Krea 2 support. It is the same code as the Dials part of
+> [ComfyUI-MAINodes](https://github.com/matlowai/ComfyUI-MAINodes), under the same node ids, without the rest of
+> MAINodes. See [What is in this pack](#what-is-in-this-pack). The five original nodes are still here, so older
+> workflows open as before. Start with the **[step-by-step guide](https://matlowai.github.io/ComfyUI-Dials/guide.html)**.
 
 **Training-free steering dials for MiniMax H3, made from prompt pairs.** Write two prompts that differ in one quality,
 for example *"stands perfectly still"* vs *"runs across the scene"*. Dials turns the difference into a **~14 KB file**
@@ -44,6 +46,39 @@ and crisper frames. [▶ Full video with timings, motion and sharpness](assets/p
   text-encoder pass per prompt).
 - **~14 KB per dial.** A typical video LoRA is 80–160 MB.
 - **Stacks** with LoRAs and with other dials.
+
+## What is in this pack
+
+| part | where | notes |
+|---|---|---|
+| **Dial Rack nodes** (`MAIDialRack`, `MAIDialMake`, `MAIDialMakeFromPictures`, `MAIDialMakeFromVideos`, `MAIDialCombine`, `MAIDialHoldMap`) | `dials/*.py`, `web/` | Menu category **MAINodes/Dials**. Documented in **[dials/README.md](dials/README.md)**: the rack, step envelopes, block strengths, time curves, holds, presets, the map, the dial editor, model families. |
+| **Original nodes** (`DialsMakeDial`, `DialsApplyDial`, `DialsLoadDial`, `DialsCombineDials`, `DialsSaveDial`) | `nodes.py` | Menu category **Dials**. Unchanged from 0.1.0; MiniMax H3 only. Described [below](#original-nodes-category-dials). |
+| Released dial files | `dials/*.safetensors` | Unchanged. See [Released dials](#released-dials-dials). |
+| Example workflows | `workflows/` (original nodes), `examples/dials/` (rack) | Most of the `examples/dials/` workflows also use de-rope nodes from ComfyUI-MAINodes (`H3TimeSmear` and others); the three in `examples/dials/_archive/` named `one_dial`, `four_dials` and `pika_rack` use only the rack and core nodes. The full list, per workflow, is in [examples/dials/README.md](examples/dials/README.md). |
+| Blueprints | `blueprints/` | *Dials - Image* and *Dials - H3 + De-rope* (the second needs ComfyUI-MAINodes). Not auto-listed; copy one into a `subgraphs/` folder to get it in ComfyUI's blueprint list, or use MAINodes, which lists both. |
+| Notes | `dials/ROADMAP.md`, `dials/LESSONS.md`, `dials/docs/`, `dials/research/` | The roadmap, what was learned, design notes and the open research folder. |
+| Tests | `tests/` | `python tests/test_dial_rack.py` and the other `tests/test_*.py`; CPU only, no model files. They use the ComfyUI checkout two folders up, or `$COMFYUI_ROOT`. |
+
+The Dial Rack code is copied from ComfyUI-MAINodes by `tools/sync_from_mainodes.py`; [SYNC.md](SYNC.md) names the
+MAINodes commit and lists the two import lines that differ. The copied docs are MAINodes' own text, so they say
+"MAINodes" where this pack is meant too, and they describe two nodes that are only in MAINodes (Render Preset and
+H3 De-rope Sigmas).
+
+Both node sets read and write the same dial files in `models/loras/dials/` and use the same `DIAL` socket type.
+
+### Running next to ComfyUI-MAINodes
+
+The Dial Rack nodes have the same ids, server routes (`/mainodes/dials/...`) and rack UI in both packs, so only one
+pack provides them:
+
+- **MAINodes not installed:** this pack provides everything listed above.
+- **MAINodes installed:** MAINodes provides the Dial Rack nodes, routes and rack UI. This pack then loads only its five
+  original nodes and writes one line to the ComfyUI log saying so. Workflows are unaffected, because the node ids are
+  the same.
+
+MAINodes is recognised by its contents (a pack folder with a `dials/nodes.py` that declares `MAIDialRack`), whatever
+the folder is called. A folder ComfyUI does not load (name ending in `.disabled`, or left out by
+`--disable-all-custom-nodes`) does not count. The rule is in `ownership.py`; `tests/test_load_once.py` checks it.
 
 ## What a dial is, and how it differs from things you know
 
@@ -100,7 +135,9 @@ Two corrections, on by default:
 - **Calibrate** (pre_refiner only). Make Dial runs the refiner and rescales so strength 1 means one average pair
   difference where the DiT reads the prompt.
 
-## Nodes (category: Dials)
+## Original nodes (category: Dials)
+
+These are the five nodes this pack started with. For the Dial Rack nodes see [dials/README.md](dials/README.md).
 
 | node | what it does |
 |---|---|
@@ -124,11 +161,16 @@ Two corrections, on by default:
    - `workflows/dial_maker_h3.json`: make and preview your own dial;
    - `workflows/dials_pika_h3_flex*.json`: the motion dial on Pika H3 Flex (6 steps), with and without de-rope. See
      [Pika H3 Flex + Dials](#pika-h3-flex--dials).
+   - `examples/dials/_archive/one_dial.json`, `four_dials.json`, `pika_rack.json`: the Dial Rack with one or several
+     dials. The other `examples/dials/` workflows add de-rope and need ComfyUI-MAINodes
+     ([which workflow needs what](examples/dials/README.md)).
 
    API-format twins (`*_api.json`) are included.
 
-**Requirements:** MiniMax H3 in ComfyUI (Comfy-Org repack). Other DiTs with a text projection and refiner are a
-table entry away (`TEXT_PROJECTIONS` in `nodes.py`).
+**Requirements:** MiniMax H3 in ComfyUI (Comfy-Org repack). For the original nodes, other DiTs with a text
+projection and refiner are a table entry away (`TEXT_PROJECTIONS` in `nodes.py`). The Dial Rack nodes need a ComfyUI
+that includes MiniMax H3 support; on one that does not, they are left out with a line in the log and the original
+nodes still load. MOSS-Image and Krea 2 are supported by the Dial Rack nodes only.
 
 **Writing good pairs:**
 - Make A and B identical except for the one quality you want.
